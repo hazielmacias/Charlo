@@ -90,3 +90,12 @@ INSERT INTO messages (conversation_id, direction, type, content, status, created
 ('a0000000-0000-0000-0000-000000000006', 'outbound', 'text', 'Tus deudas pendientes son:\n\n1. Boda completa - $20,000 (vence 20 May) - VENCIDA\n2. Música en vivo - $5,000 (vence 30 Jun)\n\nTotal: $25,000\n\n¿Qué deseas hacer?', 'sent', NOW() - INTERVAL '2 hours 50 minutes' + INTERVAL '2 seconds'),
 ('a0000000-0000-0000-0000-000000000006', 'inbound', 'interactive', 'menu_make_payment', 'sent', NOW() - INTERVAL '20 minutes'),
 ('a0000000-0000-0000-0000-000000000006', 'outbound', 'text', 'Para realizar el pago, depósito a:\n\nBanco: Azteca\nCBU: 5263540165817087\nAlias: Alebrijes Teotihuacan\n\nUna vez realizado, envía tu comprobante.', 'sent', NOW() - INTERVAL '20 minutes' + INTERVAL '2 seconds');
+
+-- 5. RECEIPTS (approved - for monthly chart)
+INSERT INTO receipts (client_id, debt_id, file_url, file_type, status, created_at) VALUES
+('c0000000-0000-0000-0000-000000000001', 'd0000000-0000-0000-0000-000000000001', 'https://example.com/receipt1.jpg', 'image', 'approved', NOW() - INTERVAL '5 months'),
+('c0000000-0000-0000-0000-000000000001', 'd0000000-0000-0000-0000-000000000001', 'https://example.com/receipt2.jpg', 'image', 'approved', NOW() - INTERVAL '4 months'),
+('c0000000-0000-0000-0000-000000000002', 'd0000000-0000-0000-0000-000000000003', 'https://example.com/receipt3.jpg', 'image', 'approved', NOW() - INTERVAL '3 months'),
+('c0000000-0000-0000-0000-000000000003', 'd0000000-0000-0000-0000-000000000005', 'https://example.com/receipt4.jpg', 'image', 'approved', NOW() - INTERVAL '2 months'),
+('c0000000-0000-0000-0000-000000000004', 'd0000000-0000-0000-0000-000000000007', 'https://example.com/receipt5.jpg', 'image', 'approved', NOW() - INTERVAL '1 month'),
+('c0000000-0000-0000-0000-000000000005', 'd0000000-0000-0000-0000-000000000008', 'https://example.com/receipt6.jpg', 'image', 'approved', NOW() - INTERVAL '15 days');

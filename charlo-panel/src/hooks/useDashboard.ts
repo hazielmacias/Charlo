@@ -97,23 +97,44 @@ async function fetchAgingData(): Promise<AgingData[]> {
 async function fetchMonthlyCollections(): Promise<MonthlyCollection[]> {
   const months: MonthlyCollection[] = []
   const now = new Date()
+  const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
 
   for (let i = 5; i >= 0; i--) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    const startDate = date.toISOString()
-    const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString()
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth() - i, 1, 0, 0, 0, 0)
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999)
 
-    const { data } = await supabase
+    const startDate = startOfMonth.toISOString()
+    const endDate = endOfMonth.toISOString()
+
+    const { data: receipts } = await supabase
       .from('receipts')
-      .select('amount')
+      .select('debt_id, debt:debts(amount)')
       .eq('status', 'approved')
       .gte('created_at', startDate)
       .lte('created_at', endDate)
 
-    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+    let amount = 0
+    if (receipts && receipts.length > 0) {
+      amount = receipts.reduce((sum, r) => {
+        const debtAmount = r.debt && !Array.isArray(r.debt) ? (r.debt as any).amount : 0
+        return sum + (debtAmount || 0)
+      }, 0)
+    }
+
+    if (amount === 0) {
+      const { data: debts } = await supabase
+        .from('debts')
+        .select('amount')
+        .eq('status', 'paid')
+        .gte('updated_at', startDate)
+        .lte('updated_at', endDate)
+
+      amount = debts?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0
+    }
+
     months.push({
-      month: monthNames[date.getMonth()],
-      amount: data?.reduce((sum, r) => sum + (r.amount || 0), 0) || 0,
+      month: monthNames[startOfMonth.getMonth()],
+      amount,
     })
   }
 

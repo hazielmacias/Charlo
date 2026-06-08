@@ -1,5 +1,5 @@
-import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { Conversation, WhatsAppMessage } from "../types.ts"
+import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.39.0"
+import { Conversation, WhatsAppMessage, ConversationState } from "../types.ts"
 
 // Receipt button IDs
 export const RECEIPT_BUTTONS = {
@@ -192,6 +192,3 @@ export async function handle_receipt_received_state(
   // Stay in receipt_received state for other messages
   return null
 }
-
-// Import ConversationState type
-import { ConversationState } from "../types.ts"

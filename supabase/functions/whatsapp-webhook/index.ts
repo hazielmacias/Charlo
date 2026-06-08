@@ -1,30 +1,26 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { crypto } from "https://deno.land/std@0.168.0/crypto/mod.ts"
-import {
-  get_conversation_state,
-  update_conversation_state,
-  reset_conversation,
-  handle_menu_state,
-  handle_viewing_debt_state,
-  handle_sent_bank_details_state,
-  handle_receipt_received_state,
-  handle_human_agent_state,
-} from "./state-machine.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0"
 import { ConversationState } from "./types.ts"
-import {
-  hasConversationTimedOut,
-  handleConversationTimeout,
-} from "./handlers/error-handling.ts"
-import {
-  isWithinBusinessHours,
-  getBusinessHoursMessage,
-  getDefaultTimezone,
-} from "./handlers/business-hours.ts"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-hub-signature-256",
+}
+
+// Lazy-loaded modules
+let stateMachine: any = null
+let errorHandler: any = null
+let businessHours: any = null
+
+async function loadModules() {
+  if (!stateMachine) {
+    stateMachine = await import("./state-machine.ts")
+  }
+  if (!errorHandler) {
+    errorHandler = await import("./handlers/error-handling.ts")
+  }
+  if (!businessHours) {
+    businessHours = await import("./handlers/business-hours.ts")
+  }
 }
 
 // Verify webhook signature (HMAC SHA-256)
@@ -137,13 +133,14 @@ async function saveMessage(supabase: any, conversationId: string, message: any) 
 
 // State machine handler
 async function handleState(supabase: any, conversation: any, message: any, clientIp: string) {
+  await loadModules()
+  
   const state = conversation.state as ConversationState
-  const content = message.type === "text" ? message.text?.body : ""
 
   // Check for conversation timeout (24h inactivity)
-  const hasTimedOut = await hasConversationTimedOut(supabase, conversation.id)
+  const hasTimedOut = await errorHandler.hasConversationTimedOut(supabase, conversation.id)
   if (hasTimedOut) {
-    await handleConversationTimeout(supabase, conversation.id)
+    await errorHandler.handleConversationTimeout(supabase, conversation.id)
     // Reset to menu state and continue processing
     conversation.state = "menu"
     conversation.context = {}
@@ -158,12 +155,12 @@ async function handleState(supabase: any, conversation: any, message: any, clien
   // Check business hours (optional - only if enabled)
   const checkBusinessHours = Deno.env.get("CHECK_BUSINESS_HOURS") === "true"
   if (checkBusinessHours) {
-    const timezone = getDefaultTimezone()
-    if (!isWithinBusinessHours(timezone)) {
+    const timezone = businessHours.getDefaultTimezone()
+    if (!businessHours.isWithinBusinessHours(timezone)) {
       // Send business hours message (only for menu state)
       if (state === "menu") {
-        const { sendWelcomeMenu } = await import("./handlers/menu.ts")
-        await sendWelcomeMenu(supabase, conversation)
+        const menuModule = await import("./handlers/menu.ts")
+        await menuModule.sendWelcomeMenu(supabase, conversation)
         // Send business hours info
         const supabaseUrl = Deno.env.get("SUPABASE_URL")
         const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
@@ -177,7 +174,7 @@ async function handleState(supabase: any, conversation: any, message: any, clien
             to: conversation.phone,
             type: "text",
             conversation_id: conversation.id,
-            content: { text: getBusinessHoursMessage(timezone) },
+            content: { text: businessHours.getBusinessHoursMessage(timezone) },
           }),
         })
       }
@@ -188,61 +185,54 @@ async function handleState(supabase: any, conversation: any, message: any, clien
   // State machine logic
   switch (state) {
     case "menu": {
-      // Handle menu state
-      const result = await handle_menu_state(supabase, conversation, message)
+      const result = await stateMachine.handle_menu_state(supabase, conversation, message)
       if (result) {
-        await update_conversation_state(supabase, conversation.phone, result.state, result.context)
+        await stateMachine.update_conversation_state(supabase, conversation.phone, result.state, result.context)
       }
       break
     }
 
     case "viewing_debt": {
-      // Handle viewing_debt state
-      const result = await handle_viewing_debt_state(supabase, conversation, message)
+      const result = await stateMachine.handle_viewing_debt_state(supabase, conversation, message)
       if (result) {
-        await update_conversation_state(supabase, conversation.phone, result.state, result.context)
+        await stateMachine.update_conversation_state(supabase, conversation.phone, result.state, result.context)
       }
       break
     }
 
     case "sent_bank_details": {
-      // Handle sent_bank_details state
-      const result = await handle_sent_bank_details_state(supabase, conversation, message)
+      const result = await stateMachine.handle_sent_bank_details_state(supabase, conversation, message)
       if (result) {
-        await update_conversation_state(supabase, conversation.phone, result.state, result.context)
+        await stateMachine.update_conversation_state(supabase, conversation.phone, result.state, result.context)
       }
       break
     }
 
     case "awaiting_payment":
-      // TODO: Handle payment waiting state
       break
 
     case "receipt_received": {
-      // Handle receipt_received state
-      const result = await handle_receipt_received_state(supabase, conversation, message)
+      const result = await stateMachine.handle_receipt_received_state(supabase, conversation, message)
       if (result) {
-        await update_conversation_state(supabase, conversation.phone, result.state, result.context)
+        await stateMachine.update_conversation_state(supabase, conversation.phone, result.state, result.context)
       }
       break
     }
 
     case "human_agent": {
-      // Handle human_agent state
-      const result = await handle_human_agent_state(supabase, conversation, message)
+      const result = await stateMachine.handle_human_agent_state(supabase, conversation, message)
       if (result) {
-        await update_conversation_state(supabase, conversation.phone, result.state, result.context)
+        await stateMachine.update_conversation_state(supabase, conversation.phone, result.state, result.context)
       }
       break
     }
 
     default:
-      // Reset to menu if unknown state
-      await reset_conversation(supabase, conversation.phone)
+      await stateMachine.reset_conversation(supabase, conversation.phone)
   }
 }
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })

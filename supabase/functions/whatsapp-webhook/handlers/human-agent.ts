@@ -1,5 +1,5 @@
-import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { Conversation, WhatsAppMessage } from "../types.ts"
+import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.39.0"
+import { Conversation, WhatsAppMessage, ConversationState } from "../types.ts"
 
 // Human agent button IDs
 export const HUMAN_AGENT_BUTTONS = {
@@ -147,6 +147,3 @@ export async function handle_human_agent_state(
   // Stay in human_agent state - all messages go to agent
   return null
 }
-
-// Import ConversationState type
-import { ConversationState } from "../types.ts"

@@ -1,5 +1,5 @@
-import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { Conversation, WhatsAppMessage } from "../types.ts"
+import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.39.0"
+import { Conversation, WhatsAppMessage, ConversationState } from "../types.ts"
 
 // Payment button IDs
 export const PAYMENT_BUTTONS = {
@@ -214,6 +214,3 @@ export async function handle_sent_bank_details_state(
   // Stay in sent_bank_details state for other messages
   return null
 }
-
-// Import ConversationState type
-import { ConversationState } from "../types.ts"

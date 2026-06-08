@@ -461,11 +461,11 @@
 - [1] Configurar logging estructurado
 
 ### 7.5 Documentación
-- [x] Documentar endpoints de Edge Functions
-- [x] Documentar estructura de BD
-- [x] Documentar variables de entorno requeridas
-- [x] Documentar proceso de deploy
-- [x] Crear README con instrucciones de setup local
+- [1] Documentar endpoints de Edge Functions
+- [1] Documentar estructura de BD
+- [1] Documentar variables de entorno requeridas
+- [1] Documentar proceso de deploy
+- [1] Crear README con instrucciones de setup local
 
 ---
 

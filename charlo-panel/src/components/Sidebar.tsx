@@ -4,6 +4,7 @@ import {
   Home,
   Users,
   CreditCard,
+  MessageSquare,
   FileText,
   Settings,
   X,
@@ -18,6 +19,7 @@ interface SidebarProps {
 const navItems = [
   { to: '/', label: 'Inicio', icon: Home },
   { to: '/clients', label: 'Clientes', icon: Users },
+  { to: '/conversations', label: 'Conversaciones', icon: MessageSquare },
   { to: '/debts', label: 'Cobros', icon: CreditCard },
   { to: '/receipts', label: 'Comprobantes', icon: FileText, showBadge: true },
   { to: '/settings', label: 'Configuracion', icon: Settings },
@@ -25,6 +27,7 @@ const navItems = [
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [pendingCount, setPendingCount] = useState(0)
+  const [activeConversations, setActiveConversations] = useState(0)
 
   useEffect(() => {
     const fetchPending = async () => {
@@ -39,8 +42,24 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       }
     }
 
+    const fetchActiveConversations = async () => {
+      try {
+        const { count } = await supabase
+          .from('conversations')
+          .select('*', { count: 'exact', head: true })
+          .neq('state', 'closed')
+        setActiveConversations(count || 0)
+      } catch {
+        // Ignore error
+      }
+    }
+
     fetchPending()
-    const interval = setInterval(fetchPending, 30000)
+    fetchActiveConversations()
+    const interval = setInterval(() => {
+      fetchPending()
+      fetchActiveConversations()
+    }, 30000)
     return () => clearInterval(interval)
   }, [])
 
@@ -103,6 +122,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               {item.showBadge && pendingCount > 0 && (
                 <span className="min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-semibold bg-red-500 text-white rounded-full">
                   {pendingCount > 99 ? '99+' : pendingCount}
+                </span>
+              )}
+              {item.to === '/conversations' && activeConversations > 0 && (
+                <span className="min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-semibold bg-green-500 text-white rounded-full">
+                  {activeConversations > 99 ? '99+' : activeConversations}
                 </span>
               )}
             </NavLink>

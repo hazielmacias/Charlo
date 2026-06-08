@@ -36,10 +36,10 @@ export interface Conversation {
 export interface Message {
   id: string
   conversation_id: string
-  direction: 'incoming' | 'outgoing'
+  direction: 'inbound' | 'outbound'
   type: 'text' | 'image' | 'document' | 'interactive'
   content: string
-  status: 'sent' | 'delivered' | 'read' | 'failed'
+  status: 'sent' | 'delivered' | 'read' | 'failed' | 'received'
   created_at: string
 }
 

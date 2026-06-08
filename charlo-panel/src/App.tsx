@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Clients } from './pages/Clients'
 import { ClientDetail } from './pages/ClientDetail'
 import { Debts } from './pages/Debts'
+import { Conversations } from './pages/Conversations'
 import { Receipts } from './pages/Receipts'
 import { ReceiptDetail } from './pages/ReceiptDetail'
 import { Settings } from './pages/Settings'
@@ -42,6 +43,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/clients" element={<Clients />} />
           <Route path="/clients/:id" element={<ClientDetail />} />
+          <Route path="/conversations" element={<Conversations />} />
           <Route path="/debts" element={<Debts />} />
           <Route path="/receipts" element={<Receipts />} />
           <Route path="/receipts/:id" element={<ReceiptDetail />} />

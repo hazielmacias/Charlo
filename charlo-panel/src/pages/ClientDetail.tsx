@@ -270,11 +270,11 @@ function ConversationItem({ conversation }: { conversation: any }) {
           {messages.slice(-3).map((msg: any) => (
             <div
               key={msg.id}
-              className={`flex ${msg.direction === 'outgoing' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${msg.direction === 'outbound' ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`max-w-[80%] px-3 py-1.5 rounded-xl text-[11px] ${
-                  msg.direction === 'outgoing'
+                  msg.direction === 'outbound'
                     ? 'bg-blue-50 text-blue-700'
                     : 'bg-gray-100 text-gray-600'
                 }`}

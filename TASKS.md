@@ -448,17 +448,17 @@
 - [1] Verificar SSL activo
 
 ### 7.3 Meta Production
-- [ ] Cambiar de número de prueba a producción
-- [ ] Verificar webhook URL apunta a producción
-- [ ] Verificar access token es de producción
-- [ ] Enviar solicitud de verificación de negocio
-- [ ] Configurar mensaje de bienvenida de WhatsApp Business
+- [x] Cambiar de número de prueba a producción
+- [x] Verificar webhook URL apunta a producción
+- [x] Verificar access token es de producción
+- [x] Enviar solicitud de verificación de negocio
+- [x] Configurar mensaje de bienvenida de WhatsApp Business
 
 ### 7.4 Monitoreo
-- [ ] Configurar alertas de error en Supabase
-- [ ] Revisar métricas de uso de Edge Functions
-- [ ] Monitorear costo de Meta Cloud API
-- [ ] Configurar logging estructurado
+- [x] Configurar alertas de error en Supabase
+- [x] Revisar métricas de uso de Edge Functions
+- [x] Monitorear costo de Meta Cloud API
+- [x] Configurar logging estructurado
 
 ### 7.5 Documentación
 - [ ] Documentar endpoints de Edge Functions

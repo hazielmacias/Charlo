@@ -1,5 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -106,7 +105,7 @@ async function processReminder(supabase: any, reminder: any): Promise<string> {
   }
 
   // Get client timezone (default to Mexico City)
-  const timezone = client.timezone || DEFAULT_TIMEZONE
+  const timezone = DEFAULT_TIMEZONE
   const localHour = getLocalHour(new Date(), timezone)
 
   // Check if within allowed hours (8:00 - 20:00)
@@ -164,8 +163,7 @@ async function processReminder(supabase: any, reminder: any): Promise<string> {
   }
 }
 
-// Main server
-serve(async (req: Request) => {
+Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })
   }
@@ -187,7 +185,7 @@ serve(async (req: Request) => {
         scheduled_at,
         attempts,
         max_attempts,
-        clients!inner(id, name, phone, timezone),
+        clients!inner(id, name, phone),
         debts!inner(id, description, amount)
       `)
       .eq("status", "pending")

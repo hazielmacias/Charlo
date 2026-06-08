@@ -14,28 +14,28 @@
 - [1] Habilitar extensión `pg_net` (webhooks HTTP asíncronos)
 
 ### 0.2 Meta Business Suite
-- [ ] Crear Meta Business Account (o usar existente)
-- [ ] Crear WhatsApp Business Account
-- [ ] Obtener Phone Number ID desde Meta Developer Dashboard
-- [ ] Obtener Permanent Access Token (System User Token)
-- [ ] Registrar número de teléfono verificado
-- [ ] Configurar webhook URL en Meta Dashboard (placeholder temporal)
+- [1] Crear Meta Business Account (o usar existente)
+- [1] Crear WhatsApp Business Account
+- [1] Obtener Phone Number ID desde Meta Developer Dashboard
+- [1] Obtener Permanent Access Token (System User Token)
+- [1] Registrar número de teléfono verificado
+- [1] Configurar webhook URL en Meta Dashboard (placeholder temporal)
 
 ### 0.3 Frontend - React
-- [ ] Inicializar proyecto con Vite: `npm create vite@latest charlo-panel -- --template react-ts`
-- [ ] Instalar dependencias base:
-  - [ ] `tailwindcss` + `postcss` + `autoprefixer`
-  - [ ] `@supabase/supabase-js`
-  - [ ] `react-router-dom`
-  - [ ] `lucide-react` (iconos)
-  - [ ] `recharts` (gráficos dashboard)
-  - [ ] `papaparse` (parseo CSV)
-  - [ ] `xlsx` (lectura Excel)
-  - [ ] `date-fns` (manejo de fechas)
-  - [ ] `react-hook-form` (formularios)
-  - [ ] `zod` (validación de schemas)
-- [ ] Configurar Tailwind con paleta de colores azules
-- [ ] Configurar estructura de carpetas:
+- [1] Inicializar proyecto con Vite: `npm create vite@latest charlo-panel -- --template react-ts`
+- [1] Instalar dependencias base:
+  - [1] `tailwindcss` + `postcss` + `autoprefixer`
+  - [1] `@supabase/supabase-js`
+  - [1] `react-router-dom`
+  - [1] `lucide-react` (iconos)
+  - [1] `recharts` (gráficos dashboard)
+  - [1] `papaparse` (parseo CSV)
+  - [1] `xlsx` (lectura Excel)
+  - [1] `date-fns` (manejo de fechas)
+  - [1] `react-hook-form` (formularios)
+  - [1] `zod` (validación de schemas)
+- [1] Configurar Tailwind con paleta de colores azules
+- [1] Configurar estructura de carpetas:
   ```
   src/
   ├── components/
@@ -47,15 +47,15 @@
   ```
 
 ### 0.4 Git y Control de Versiones
-- [ ] Inicializar repositorio Git
-- [ ] Crear `.gitignore` completo
-- [ ] Crear primer commit con estructura base
-- [ ] Conectar a repositorio remoto (GitHub/GitLab)
+- [1] Inicializar repositorio Git
+- [1] Crear `.gitignore` completo
+- [1] Crear primer commit con estructura base
+- [1] Conectar a repositorio remoto (GitHub/GitLab)
 
 ### 0.5 Variables de Entorno
-- [ ] Crear archivo `.env.local` en frontend
-- [ ] Crear archivo `.env` en Supabase Edge Functions
-- [ ] Documentar variables requeridas:
+- [1] Crear archivo `.env.local` en frontend
+- [1] Crear archivo `.env` en Supabase Edge Functions
+- [1] Documentar variables requeridas:
   ```
   VITE_SUPABASE_URL=
   VITE_SUPABASE_ANON_KEY=
@@ -71,55 +71,55 @@
 ## FASE 1: BASE DE DATOS
 
 ### 1.1 Tablas Principales
-- [ ] Crear tabla `clients` (deudores)
-- [ ] Crear tabla `debts` (deudas individuales)
-- [ ] Crear tabla `conversations` (conversaciones WhatsApp)
-- [ ] Crear tabla `messages` (historial de mensajes)
-- [ ] Crear tabla `receipts` (comprobantes de pago)
-- [ ] Crear tabla `reminders` (recordatorios programados)
-- [ ] Crear tabla `bank_config` (datos bancarios)
-- [ ] Crear tabla `settings` (configuración del sistema)
-- [ ] Crear tabla `admin_users` (usuarios del panel)
+- [1] Crear tabla `clients` (deudores)
+- [1] Crear tabla `debts` (deudas individuales)
+- [1] Crear tabla `conversations` (conversaciones WhatsApp)
+- [1] Crear tabla `messages` (historial de mensajes)
+- [1] Crear tabla `receipts` (comprobantes de pago)
+- [1] Crear tabla `reminders` (recordatorios programados)
+- [1] Crear tabla `bank_config` (datos bancarios)
+- [1] Crear tabla `settings` (configuración del sistema)
+- [1] Crear tabla `admin_users` (usuarios del panel)
 
 ### 1.2 Índices
-- [ ] Índice en `clients.phone`
-- [ ] Índice en `debts.client_id`
-- [ ] Índice en `debts.status`
-- [ ] Índice en `conversations.phone`
-- [ ] Índice en `receipts.status`
-- [ ] Índice parcial en `reminders` WHERE status = 'pending'
+- [1] Índice en `clients.phone`
+- [1] Índice en `debts.client_id`
+- [1] Índice en `debts.status`
+- [1] Índice en `conversations.phone`
+- [1] Índice en `receipts.status`
+- [1] Índice parcial en `reminders` WHERE status = 'pending'
 
 ### 1.3 Row Level Security (RLS)
-- [ ] Habilitar RLS en tabla `clients`
-- [ ] Habilitar RLS en tabla `debts`
-- [ ] Habilitar RLS en tabla `receipts`
-- [ ] Habilitar RLS en tabla `conversations`
-- [ ] Habilitar RLS en tabla `messages`
-- [ ] Crear policies para usuarios autenticados (panel)
-- [ ] Crear policy para Edge Functions (service_role bypass)
+- [1] Habilitar RLS en tabla `clients`
+- [1] Habilitar RLS en tabla `debts`
+- [1] Habilitar RLS en tabla `receipts`
+- [1] Habilitar RLS en tabla `conversations`
+- [1] Habilitar RLS en tabla `messages`
+- [1] Crear policies para usuarios autenticados (panel)
+- [1] Crear policy para Edge Functions (service_role bypass)
 
 ### 1.4 Functions y Triggers
-- [ ] Crear function `update_updated_at()` para auto-actualizar timestamps
-- [ ] Crear trigger en `clients` para llamar `update_updated_at`
-- [ ] Crear trigger en `debts` para llamar `update_updated_at`
-- [ ] Crear function `calculate_client_debt_total()` que sume deudas pendientes
-- [ ] Crear trigger en `debts` que actualice `clients.debt_total` al insertar/actualizar/delete
+- [1] Crear function `update_updated_at()` para auto-actualizar timestamps
+- [1] Crear trigger en `clients` para llamar `update_updated_at`
+- [1] Crear trigger en `debts` para llamar `update_updated_at`
+- [1] Crear function `calculate_client_debt_total()` que sume deudas pendientes
+- [1] Crear trigger en `debts` que actualice `clients.debt_total` al insertar/actualizar/delete
 
 ### 1.5 Datos Iniciales
-- [ ] Insertar registro en `bank_config` con datos bancarios de prueba
-- [ ] Insertar settings iniciales (horario recordatorios 8-20, timezone default)
-- [ ] Crear usuario admin de prueba en Supabase Auth
+- [1] Insertar registro en `bank_config` con datos bancarios de prueba
+- [1] Insertar settings iniciales (horario recordatorios 8-20, timezone default)
+- [1] Crear usuario admin de prueba en Supabase Auth
 
 ---
 
 ## FASE 2: EDGE FUNCTIONS - BACKEND
 
 ### 2.1 Setup Edge Functions
-- [ ] Instalar Supabase CLI globally
-- [ ] Ejecutar `supabase init` en el proyecto
-- [ ] Ejecutar `supabase login`
-- [ ] Ejecutar `supabase link --project-ref <ref>`
-- [ ] Crear estructura de funciones:
+- [1] Instalar Supabase CLI globally
+- [1] Ejecutar `supabase init` en el proyecto
+- [1] Ejecutar `supabase login`
+- [1] Ejecutar `supabase link --project-ref <ref>`
+- [1] Crear estructura de funciones:
   ```
   supabase/functions/
   ├── whatsapp-webhook/
@@ -130,131 +130,131 @@
   ```
 
 ### 2.2 Función: `whatsapp-webhook`
-- [ ] Crear endpoint POST para recibir webhooks de Meta
-- [ ] Implementar verificación de firma del webhook (HMAC SHA-256)
-- [ ] Implementar handling del payload de verificación GET (hub.mode, hub.challenge)
-- [ ] Parsear mensajes entrantes (texto, imagen, documento, interactivo)
-- [ ] Identificar remitente por número de teléfono
-- [ ] Buscar o crear `conversation` activa para el teléfono
-- [ ] Guardar mensaje entrante en tabla `messages`
-- [ ] Ejecutar máquina de estados según `conversation.state`
-- [ ] Responder con 200 OK inmediatamente (no bloquear)
+- [1] Crear endpoint POST para recibir webhooks de Meta
+- [1] Implementar verificación de firma del webhook (HMAC SHA-256)
+- [1] Implementar handling del payload de verificación GET (hub.mode, hub.challenge)
+- [1] Parsear mensajes entrantes (texto, imagen, documento, interactivo)
+- [1] Identificar remitente por número de teléfono
+- [1] Buscar o crear `conversation` activa para el teléfono
+- [1] Guardar mensaje entrante en tabla `messages`
+- [1] Ejecutar máquina de estados según `conversation.state`
+- [1] Responder con 200 OK inmediatamente (no bloquear)
 
 ### 2.3 Función: `whatsapp-send`
-- [ ] Crear helper para enviar mensajes de texto
-- [ ] Crear helper para enviar botones interactivos (Reply Buttons)
-- [ ] Crear helper para enviar List Messages (menú de opciones)
-- [ ] Crear helper para enviar imágenes/documentos
-- [ ] Implementar manejo de errores de la API de Meta
-- [ ] Implementar retry logic con backoff exponencial
-- [ ] Guardar mensaje enviado en tabla `messages` con status 'sent'
-- [ ] Actualizar status del mensaje cuando llegue webhook de delivery/read
+- [1] Crear helper para enviar mensajes de texto
+- [1] Crear helper para enviar botones interactivos (Reply Buttons)
+- [1] Crear helper para enviar List Messages (menú de opciones)
+- [1] Crear helper para enviar imágenes/documentos
+- [1] Implementar manejo de errores de la API de Meta
+- [1] Implementar retry logic con backoff exponencial
+- [1] Guardar mensaje enviado en tabla `messages` con status 'sent'
+- [1] Actualizar status del mensaje cuando llegue webhook de delivery/read
 
 ### 2.4 Función: `process-receipt`
-- [ ] Recibir payload con URL del archivo multimedia de WhatsApp
-- [ ] Descargar archivo desde Media URL de WhatsApp API
-- [ ] Determinar tipo de archivo (imagen, pdf, screenshot)
-- [ ] Subir archivo a Supabase Storage bucket `receipts`
-- [ ] Crear registro en tabla `receipts` con file_url y metadata
-- [ ] Actualizar estado de conversación a 'receipt_received'
-- [ ] Enviar confirmación al usuario
-- [ ] Notificar al admin (trigger para panel o email)
+- [1] Recibir payload con URL del archivo multimedia de WhatsApp
+- [1] Descargar archivo desde Media URL de WhatsApp API
+- [1] Determinar tipo de archivo (imagen, pdf, screenshot)
+- [1] Subir archivo a Supabase Storage bucket `receipts`
+- [1] Crear registro en tabla `receipts` con file_url y metadata
+- [1] Actualizar estado de conversación a 'receipt_received'
+- [1] Enviar confirmación al usuario
+- [1] Notificar al admin (trigger para panel o email)
 
 ### 2.5 Función: `send-reminders`
-- [ ] Consultar `reminders` con status = 'pending' y `scheduled_at` <= NOW()
-- [ ] Para cada reminder, obtener datos del cliente
-- [ ] Calcular hora local del cliente según su timezone
-- [ ] Validar que hora local está entre 8:00 y 20:00
-- [ ] Si en horario: enviar mensaje de recordatorio via `whatsapp-send`
-- [ ] Si fuera de horario: reprogramar para mañana a las 8:00 AM
-- [ ] Actualizar status del reminder a 'sent' o 'rescheduled'
-- [ ] Manejar errores y marcar como 'failed' después de 3 intentos
+- [1] Consultar `reminders` con status = 'pending' y `scheduled_at` <= NOW()
+- [1] Para cada reminder, obtener datos del cliente
+- [1] Calcular hora local del cliente según su timezone
+- [1] Validar que hora local está entre 8:00 y 20:00
+- [1] Si en horario: enviar mensaje de recordatorio via `whatsapp-send`
+- [1] Si fuera de horario: reprogramar para mañana a las 8:00 AM
+- [1] Actualizar status del reminder a 'sent' o 'rescheduled'
+- [1] Manejar errores y marcar como 'failed' después de 3 intentos
 
 ### 2.6 Función: `admin-notify`
-- [ ] Crear endpoint para obtener notificaciones del panel
-- [ ] Contar comprobantes pendientes de revisión
-- [ ] Retornar badges/contadores para el dashboard
+- [1] Crear endpoint para obtener notificaciones del panel
+- [1] Contar comprobantes pendientes de revisión
+- [1] Retornar badges/contadores para el dashboard
 
 ### 2.7 Cron Jobs (pg_cron)
-- [ ] Crear cron job para `send-reminders` cada 15 minutos
-- [ ] Verificar formato de expresión cron correcto
-- [ ] Testear ejecución manual del cron
+- [1] Crear cron job para `send-reminders` cada 15 minutos
+- [1] Verificar formato de expresión cron correcto
+- [1] Testear ejecución manual del cron
 
 ---
 
 ## FASE 3: CHATBOT - FLUJO WHATSAPP
 
 ### 3.1 Máquina de Estados
-- [ ] Definir estados posibles:
+- [1] Definir estados posibles:
   - `menu` — Menú principal
   - `viewing_debt` — Consultando deuda
   - `awaiting_payment` — Esperando comprobante
   - `sent_bank_details` — Datos bancarios enviados
   - `human_agent` — Transferido a agente
-- [ ] Crear función `get_conversation_state(phone)`
-- [ ] Crear función `update_conversation_state(phone, newState, context)`
-- [ ] Crear función `reset_conversation(phone)` para volver al menú
+- [1] Crear función `get_conversation_state(phone)`
+- [1] Crear función `update_conversation_state(phone, newState, context)`
+- [1] Crear función `reset_conversation(phone)` para volver al menú
 
 ### 3.2 Estado: Menú Principal
-- [ ] Detectar mensaje de inicio ("hola", "menu", inicio de conversación)
-- [ ] Enviar mensaje de bienvenida con nombre del cliente
-- [ ] Enviar botones interactivos:
+- [1] Detectar mensaje de inicio ("hola", "menu", inicio de conversación)
+- [1] Enviar mensaje de bienvenida con nombre del cliente
+- [1] Enviar botones interactivos:
   ```
   [Ver mi deuda] [Realizar pago] [Hablar con asesor]
   ```
-- [ ] Manejar respuesta del usuario según botón seleccionado
+- [1] Manejar respuesta del usuario según botón seleccionado
 
 ### 3.3 Estado: Ver Deuda
-- [ ] Obtener deudas pendientes del cliente desde BD
-- [ ] Si no tiene deudas: responder "No tienes deudas pendientes"
-- [ ] Si tiene deudas, formatear mensaje con detalle y total
-- [ ] Enviar botón adicional: [Realizar pago] [Volver al menú]
-- [ ] Actualizar estado a 'viewing_debt'
+- [1] Obtener deudas pendientes del cliente desde BD
+- [1] Si no tiene deudas: responder "No tienes deudas pendientes"
+- [1] Si tiene deudas, formatear mensaje con detalle y total
+- [1] Enviar botón adicional: [Realizar pago] [Volver al menú]
+- [1] Actualizar estado a 'viewing_debt'
 
 ### 3.4 Estado: Realizar Pago
-- [ ] Obtener datos bancarios activos desde `bank_config`
-- [ ] Enviar mensaje con datos bancarios (CBU, alias, titular, monto)
-- [ ] Actualizar estado a 'sent_bank_details'
-- [ ] Esperar siguiente mensaje del usuario
+- [1] Obtener datos bancarios activos desde `bank_config`
+- [1] Enviar mensaje con datos bancarios (CBU, alias, titular, monto)
+- [1] Actualizar estado a 'sent_bank_details'
+- [1] Esperar siguiente mensaje del usuario
 
 ### 3.5 Estado: Recibir Comprobante
-- [ ] Detectar si el mensaje contiene imagen, documento o multimedia
-- [ ] Llamar a función `process-receipt` para guardar el archivo
-- [ ] Confirmar al usuario: "Recibimos tu comprobante. Lo revisaremos."
-- [ ] Enviar botón: [Volver al menú] [Hablar con asesor]
-- [ ] Actualizar estado a 'receipt_received'
+- [1] Detectar si el mensaje contiene imagen, documento o multimedia
+- [1] Llamar a función `process-receipt` para guardar el archivo
+- [1] Confirmar al usuario: "Recibimos tu comprobante. Lo revisaremos."
+- [1] Enviar botón: [Volver al menú] [Hablar con asesor]
+- [1] Actualizar estado a 'receipt_received'
 
 ### 3.6 Estado: Hablar con Asesor
-- [ ] Enviar mensaje: "Un asesor se comunicará contigo pronto."
-- [ ] Actualizar estado a 'human_agent'
+- [1] Enviar mensaje: "Un asesor se comunicará contigo pronto."
+- [1] Actualizar estado a 'human_agent'
 
 ### 3.7 Manejo de Errores
-- [ ] Si usuario envía texto no válido: reenviar menú con opciones
-- [ ] Si API de WhatsApp falla: log error y reintentar una vez
-- [ ] Si usuario no responde en 24h: resetear conversación a 'menu'
-- [ ] Si usuario envía comprobante fuera del flujo: indicar "Escribí 'menu'"
+- [1] Si usuario envía texto no válido: reenviar menú con opciones
+- [1] Si API de WhatsApp falla: log error y reintentar una vez
+- [1] Si usuario no responde en 24h: resetear conversación a 'menu'
+- [1] Si usuario envía comprobante fuera del flujo: indicar "Escribí 'menu'"
 
 ### 3.8 Restricción de Horario
-- [ ] Implementar función `isWithinBusinessHours(timezone)` (8:00-20:00)
-- [ ] Integrar en `send-reminders` antes de enviar cada mensaje
-- [ ] Soportar timezone de clientes (Argentina, Chile, etc.)
+- [1] Implementar función `isWithinBusinessHours(timezone)` (8:00-20:00)
+- [1] Integrar en `send-reminders` antes de enviar cada mensaje
+- [1] Soportar timezone de clientes (Argentina, Chile, etc.)
 
 ---
 
 ## FASE 4: PANEL DE CONTROL - REACT
 
 ### 4.1 Autenticación
-- [ ] Crear página de Login (`/login`)
-- [ ] Implementar formulario con email + password
-- [ ] Integrar `supabase.auth.signInWithPassword()`
-- [ ] Crear Protected Route wrapper
-- [ ] Implementar logout
-- [ ] Guardar sesión en localStorage
-- [ ] Redirigir a dashboard si ya está autenticado
+- [1] Crear página de Login (`/login`)
+- [1] Implementar formulario con email + password
+- [1] Integrar `supabase.auth.signInWithPassword()`
+- [1] Crear Protected Route wrapper
+- [1] Implementar logout
+- [1] Guardar sesión en localStorage
+- [1] Redirigir a dashboard si ya está autenticado
 
 ### 4.2 Layout del Panel
-- [ ] Crear componente `Layout` con sidebar y área de contenido
-- [ ] Diseñar sidebar minimalista (Apple HIG):
+- [1] Crear componente `Layout` con sidebar y área de contenido
+- [1] Diseñar sidebar minimalista (Apple HIG):
   ```
   ┌─────────────┐
   │ Inicio      │
@@ -264,109 +264,109 @@
   │ Config      │
   └─────────────┘
   ```
-- [ ] Header con avatar del usuario y botón logout
-- [ ] Diseño responsive (colapsar sidebar en mobile)
+- [1] Header con avatar del usuario y botón logout
+- [1] Diseño responsive (colapsar sidebar en mobile)
 
 ### 4.3 Dashboard
-- [ ] Crear página Dashboard (`/`)
-- [ ] Tarjetas KPI (4 columnas desktop, 2 mobile):
-  - [ ] Total Recaudado
-  - [ ] Tasa de Éxito (porcentaje)
-  - [ ] Clientes al Día
-  - [ ] Pendientes Revisión (badge)
-- [ ] Gráfico Aging de Vencimiento (Bar Chart):
+- [1] Crear página Dashboard (`/`)
+- [1] Tarjetas KPI (4 columnas desktop, 2 mobile):
+  - [1] Total Recaudado
+  - [1] Tasa de Éxito (porcentaje)
+  - [1] Clientes al Día
+  - [1] Pendientes Revisión (badge)
+- [1] Gráfico Aging de Vencimiento (Bar Chart):
   - Eje X: rangos (0-30, 31-60, 61-90, 90+ días)
   - Eje Y: cantidad de deudas o monto
-- [ ] Gráfico Recaudación Mensual (Line Chart):
+- [1] Gráfico Recaudación Mensual (Line Chart):
   - Últimos 6 meses, monto recaudado por mes
-- [ ] Gráfico Distribución por Estado (Donut Chart):
+- [1] Gráfico Distribución por Estado (Donut Chart):
   - Pendiente / Pagado / Vencido
-- [ ] Tabla de "Últimas Actividades"
-- [ ] Obtener datos desde Supabase con queries optimizadas
+- [1] Tabla de "Últimas Actividades"
+- [1] Obtener datos desde Supabase con queries optimizadas
 
 ### 4.4 Gestión de Clientes
-- [ ] Crear página Clientes (`/clients`)
-- [ ] Tabla con columnas: Nombre, Teléfono, Deuda Total, Estado, Último Contacto, Acciones
-- [ ] Búsqueda por nombre o teléfono
-- [ ] Filtros por estado
-- [ ] Modal/página de Crear Cliente (nombre, teléfono, email)
-- [ ] Modal/página de Editar Cliente
-- [ ] Vista de detalle de Cliente:
-  - [ ] Datos personales
-  - [ ] Lista de deudas
-  - [ ] Historial de conversación WhatsApp
-  - [ ] Comprobantes enviados
-- [ ] Paginación
+- [1] Crear página Clientes (`/clients`)
+- [1] Tabla con columnas: Nombre, Teléfono, Deuda Total, Estado, Último Contacto, Acciones
+- [1] Búsqueda por nombre o teléfono
+- [1] Filtros por estado
+- [1] Modal/página de Crear Cliente (nombre, teléfono, email)
+- [1] Modal/página de Editar Cliente
+- [1] Vista de detalle de Cliente:
+  - [1] Datos personales
+  - [1] Lista de deudas
+  - [1] Historial de conversación WhatsApp
+  - [1] Comprobantes enviados
+- [1] Paginación
 
 ### 4.5 Gestión de Deudas
-- [ ] Crear página Cobros (`/debts`)
-- [ ] Vista de lista de todas las deudas
-- [ ] Filtros: cliente, estado, rango de fechas, rango de montos
-- [ ] Formulario de Nueva Deuda:
+- [1] Crear página Cobros (`/debts`)
+- [1] Vista de lista de todas las deudas
+- [1] Filtros: cliente, estado, rango de fechas, rango de montos
+- [1] Formulario de Nueva Deuda:
   - Seleccionar cliente (autocomplete)
   - Descripción, monto, fecha de vencimiento
-- [ ] Carga masiva CSV/Excel:
-  - [ ] Botón "Cargar archivo"
-  - [ ] Componente para subir archivo
-  - [ ] Parsear CSV (`papaparse`) o Excel (`xlsx`)
-  - [ ] Validar columnas requeridas
-  - [ ] Preview de datos antes de importar
-  - [ ] Confirmar importación
-  - [ ] Crear deudas en batch
-  - [ ] Mostrar resultado: X creadas, Y errores
-- [ ] Acción para marcar deuda como pagada
-- [ ] Acción para eliminar deuda
+- [1] Carga masiva CSV/Excel:
+  - [1] Botón "Cargar archivo"
+  - [1] Componente para subir archivo
+  - [1] Parsear CSV (`papaparse`) o Excel (`xlsx`)
+  - [1] Validar columnas requeridas
+  - [1] Preview de datos antes de importar
+  - [1] Confirmar importación
+  - [1] Crear deudas en batch
+  - [1] Mostrar resultado: X creadas, Y errores
+- [1] Acción para marcar deuda como pagada
+- [1] Acción para eliminar deuda
 
 ### 4.6 Revisión de Comprobantes
-- [ ] Crear página Comprobantes (`/receipts`)
-- [ ] Tabla con filtros: estado, cliente, fecha
-- [ ] Vista de detalle del comprobante:
-  - [ ] Preview de imagen/PDF
-  - [ ] Datos del cliente y deuda asociada
-  - [ ] Fecha de envío
-- [ ] Botones de acción:
-  - [ ] Aprobar → status 'approved', marcar deuda como pagada
-  - [ ] Rechazar → status 'rejected', agregar notas
-  - [ ] Pedir aclaración → enviar mensaje WhatsApp al cliente
-- [ ] Contador de pendientes en sidebar/badge
+- [1] Crear página Comprobantes (`/receipts`)
+- [1] Tabla con filtros: estado, cliente, fecha
+- [1] Vista de detalle del comprobante:
+  - [1] Preview de imagen/PDF
+  - [1] Datos del cliente y deuda asociada
+  - [1] Fecha de envío
+- [1] Botones de acción:
+  - [1] Aprobar → status 'approved', marcar deuda como pagada
+  - [1] Rechazar → status 'rejected', agregar notas
+  - [1] Pedir aclaración → enviar mensaje WhatsApp al cliente
+- [1] Contador de pendientes en sidebar/badge
 
 ### 4.7 Configuración
-- [ ] Crear página Configuración (`/settings`)
-- [ ] Sección: Datos Bancarios
-  - [ ] Lista de cuentas bancarias configuradas
-  - [ ] Formulario agregar/editar cuenta
-  - [ ] Toggle activar/desactivar
-- [ ] Sección: Recordatorios
-  - [ ] Configurar horario envío (hora inicio, hora fin)
-  - [ ] Configurar timezone
-  - [ ] Configurar frecuencia
-- [ ] Sección: Mensajes del Bot
-  - [ ] Editar textos de bienvenida
-  - [ ] Editar textos de recordatorio
-  - [ ] Editar textos de confirmación
-- [ ] Sección: Mi Cuenta
-  - [ ] Cambiar contraseña
-  - [ ] Actualizar email
+- [1] Crear página Configuración (`/settings`)
+- [1] Sección: Datos Bancarios
+  - [1] Lista de cuentas bancarias configuradas
+  - [1] Formulario agregar/editar cuenta
+  - [1] Toggle activar/desactivar
+- [1] Sección: Recordatorios
+  - [1] Configurar horario envío (hora inicio, hora fin)
+  - [1] Configurar timezone
+  - [1] Configurar frecuencia
+- [1] Sección: Mensajes del Bot
+  - [1] Editar textos de bienvenida
+  - [1] Editar textos de recordatorio
+  - [1] Editar textos de confirmación
+- [1] Sección: Mi Cuenta
+  - [1] Cambiar contraseña
+  - [1] Actualizar email
 
 ---
 
 ## FASE 5: INTEGRACIONES
 
 ### 5.1 Conexión Frontend ↔ Supabase
-- [ ] Crear archivo `lib/supabase.ts` con cliente Supabase
-- [ ] Crear hooks personalizados:
-  - [ ] `useClients()` — obtener lista de clientes
-  - [ ] `useClient(id)` — obtener cliente específico
-  - [ ] `useDebts(filters)` — obtener deudas con filtros
-  - [ ] `useReceipts(filters)` — obtener comprobantes
-  - [ ] `useDashboardStats()` — obtener métricas del dashboard
-- [ ] Implementar real-time subscriptions (opcional):
-  - [ ] Escuchar nuevos comprobantes recibidos
-  - [ ] Actualizar dashboard en tiempo real
+- [1] Crear archivo `lib/supabase.ts` con cliente Supabase
+- [1] Crear hooks personalizados:
+  - [1] `useClients()` — obtener lista de clientes
+  - [1] `useClient(id)` — obtener cliente específico
+  - [1] `useDebts(filters)` — obtener deudas con filtros
+  - [1] `useReceipts(filters)` — obtener comprobantes
+  - [1] `useDashboardStats()` — obtener métricas del dashboard
+- [1] Implementar real-time subscriptions (opcional):
+  - [1] Escuchar nuevos comprobantes recibidos
+  - [1] Actualizar dashboard en tiempo real
 
 ### 5.2 Webhook Verification
-- [ ] Configurar endpoint de verificación en Meta Dashboard
-- [ ] Implementar lógica de verificación GET:
+- [1] Configurar endpoint de verificación en Meta Dashboard
+- [1] Implementar lógica de verificación GET:
   ```typescript
   if (req.method === 'GET') {
     const mode = req.query['hub.mode'];
@@ -379,15 +379,15 @@
   ```
 
 ### 5.3 Firma de Webhooks
-- [ ] Implementar verificación HMAC SHA-256
-- [ ] Obtener `APP_SECRET` de Meta Dashboard
-- [ ] Validar header `x-hub-signature-256`
-- [ ] Rechazar webhooks con firma inválida
+- [1] Implementar verificación HMAC SHA-256
+- [1] Obtener `APP_SECRET` de Meta Dashboard
+- [1] Validar header `x-hub-signature-256`
+- [1] Rechazar webhooks con firma inválida
 
 ### 5.4 Gestión de Archivos Multimedia
-- [ ] Crear bucket `receipts` en Supabase Storage
-- [ ] Configurar políticas de acceso al bucket
-- [ ] Implementar descarga de media desde WhatsApp API:
+- [1] Crear bucket `receipts` en Supabase Storage
+- [1] Configurar políticas de acceso al bucket
+- [1] Implementar descarga de media desde WhatsApp API:
   ```typescript
   // 1. Obtener media_id del mensaje
   // 2. GET https://graph.facebook.com/{version}/{media_id}
@@ -401,51 +401,51 @@
 ## FASE 6: TESTING
 
 ### 6.1 Tests Unitarios
-- [ ] Configurar testing framework (Vitest o Jest)
-- [ ] Testear funciones helper de WhatsApp:
-  - [ ] Formateo de mensajes
-  - [ ] Validación de estados
-  - [ ] Cálculo de deudas
-- [ ] Testear validación de horario (8AM-8PM)
-- [ ] Testear parseo de CSV/Excel
+- [1] Configurar testing framework (Vitest o Jest)
+- [1] Testear funciones helper de WhatsApp:
+  - [1] Formateo de mensajes
+  - [1] Validación de estados
+  - [1] Cálculo de deudas
+- [1] Testear validación de horario (8AM-8PM)
+- [1] Testear parseo de CSV/Excel
 
 ### 6.2 Tests de Integración
-- [ ] Test flujo completo: crear cliente → crear deuda → simular conversación
-- [ ] Test webhook: simular payload de Meta y verificar guardado
-- [ ] Test receipt: simular envío de imagen y verificar storage
+- [1] Test flujo completo: crear cliente → crear deuda → simular conversación
+- [1] Test webhook: simular payload de Meta y verificar guardado
+- [1] Test receipt: simular envío de imagen y verificar storage
 
 ### 6.3 Tests Manuales
-- [ ] Enviar mensaje de prueba desde WhatsApp
-- [ ] Verificar recepción del webhook en Supabase
-- [ ] Verificar guardado del mensaje en BD
-- [ ] Verificar envío de respuesta con botones
-- [ ] Enviar comprobante (imagen) y verificar storage
-- [ ] Verificar notificación en panel de comprobante pendiente
-- [ ] Testear recordatorio en horario permitido
-- [ ] Testear recordatorio fuera de horario
+- [1] Enviar mensaje de prueba desde WhatsApp
+- [1] Verificar recepción del webhook en Supabase
+- [1] Verificar guardado del mensaje en BD
+- [1] Verificar envío de respuesta con botones
+- [1] Enviar comprobante (imagen) y verificar storage
+- [1] Verificar notificación en panel de comprobante pendiente
+- [1] Testear recordatorio en horario permitido
+- [1] Testear recordatorio fuera de horario
 
 ### 6.4 Pruebas de Carga
-- [ ] Simular múltiples clientes simultáneos
-- [ ] Verificar no haya race conditions
-- [ ] Verificar límites de rate limiting de Meta API
+- [1] Simular múltiples clientes simultáneos
+- [1] Verificar no haya race conditions
+- [1] Verificar límites de rate limiting de Meta API
 
 ---
 
 ## FASE 7: DEPLOY Y PRODUCCIÓN
 
 ### 7.1 Supabase Production
-- [ ] Verificar todas las migraciones aplicadas
-- [ ] Verificar RLS habilitado en todas las tablas
-- [ ] Verificar cron jobs activos
-- [ ] Configurar backups automáticos
-- [ ] Revisar logs de Edge Functions
+- [1] Verificar todas las migraciones aplicadas
+- [1] Verificar RLS habilitado en todas las tablas
+- [1] Verificar cron jobs activos
+- [1] Configurar backups automáticos
+- [1] Revisar logs de Edge Functions
 
 ### 7.2 Frontend Deploy
-- [ ] Build de producción: `npm run build`
-- [ ] Deploy en Vercel o Netlify
-- [ ] Configurar dominio personalizado (opcional)
-- [ ] Verificar variables de entorno en plataforma de deploy
-- [ ] Verificar SSL activo
+- [1] Build de producción: `npm run build`
+- [1] Deploy en Vercel o Netlify
+- [1] Configurar dominio personalizado (opcional)
+- [1] Verificar variables de entorno en plataforma de deploy
+- [1] Verificar SSL activo
 
 ### 7.3 Meta Production
 - [ ] Cambiar de número de prueba a producción
@@ -487,18 +487,3 @@
 - [ ] Vistas materializadas para queries pesadas
 
 ---
-
-## Resumen
-
-| Fase | Completadas | Pendientes | Total |
-|------|-------------|------------|-------|
-| Fase 0 | 0 | 25 | 25 |
-| Fase 1 | 0 | 25 | 25 |
-| Fase 2 | 0 | 35 | 35 |
-| Fase 3 | 0 | 30 | 30 |
-| Fase 4 | 0 | 45 | 45 |
-| Fase 5 | 0 | 15 | 15 |
-| Fase 6 | 0 | 18 | 18 |
-| Fase 7 | 0 | 17 | 17 |
-| Fase 8 | 0 | 11 | 11 |
-| **TOTAL** | **0** | **221** | **221** |

@@ -1,0 +1,99 @@
+import type { RecentActivity } from '../../types/dashboard'
+
+interface ActivityTableProps {
+  activities: RecentActivity[]
+}
+
+function formatTime(dateStr: string): string {
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('es-MX', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+function getStatusStyle(status: string) {
+  switch (status) {
+    case 'paid':
+    case 'completed':
+      return 'bg-emerald-50 text-emerald-600'
+    case 'rejected':
+      return 'bg-red-50 text-red-600'
+    case 'pending':
+    case 'awaiting_payment':
+    case 'awaiting_receipt':
+      return 'bg-amber-50 text-amber-600'
+    case 'active':
+    case 'sent':
+      return 'bg-blue-50 text-blue-600'
+    default:
+      return 'bg-gray-50 text-gray-500'
+  }
+}
+
+function getStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    paid: 'Pagado',
+    pending: 'Pendiente',
+    active: 'Activo',
+    sent: 'Enviado',
+    rejected: 'Rechazado',
+    awaiting_payment: 'Pago Pendiente',
+    awaiting_receipt: 'Comprobante Pendiente',
+    completed: 'Completado',
+  }
+  return labels[status] || status
+}
+
+export function ActivityTable({ activities }: ActivityTableProps) {
+  return (
+    <div className="bg-white rounded-2xl p-5 border border-gray-100">
+      <div className="mb-4">
+        <h3 className="text-sm font-semibold text-gray-900">
+          Actividad Reciente
+        </h3>
+        <p className="text-xs text-gray-400 mt-0.5">Ultimos registros del sistema</p>
+      </div>
+
+      {activities.length === 0 ? (
+        <div className="text-center py-8 text-gray-400 text-sm">
+          Sin actividad reciente
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {activities.map((activity, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-medium text-gray-900 truncate">
+                  {activity.client_name}
+                </p>
+                <p className="text-[11px] text-gray-400 mt-0.5">
+                  {activity.description} - {formatTime(activity.created_at)}
+                </p>
+              </div>
+              <div className="ml-3 flex items-center gap-2">
+                {activity.amount != null && activity.amount > 0 && (
+                  <span className="text-[13px] font-medium text-gray-700">
+                    ${activity.amount.toLocaleString()}
+                  </span>
+                )}
+                <span
+                  className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold ${getStatusStyle(
+                    activity.status
+                  )}`}
+                >
+                  {getStatusLabel(activity.status)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

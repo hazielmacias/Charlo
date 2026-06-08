@@ -184,11 +184,16 @@ async function fetchRecentActivities(): Promise<RecentActivity[]> {
   const receiptClientMap = new Map(receiptClients?.map(c => [c.id, c.name]) || [])
 
   receipts?.forEach(r => {
+    const statusLabels: Record<string, string> = {
+      pending: 'Comprobante recibido',
+      approved: 'Comprobante aprobado',
+      rejected: 'Comprobante rechazado',
+    }
     activities.push({
       id: r.id,
       type: 'receipt',
-      client_name: receiptClientMap.get(r.client_id) || 'Desconocido',
-      description: `Comprobante enviado`,
+      client_name: receiptClientMap.get(r.client_id) || 'Cliente',
+      description: statusLabels[r.status] || 'Comprobante',
       status: r.status,
       created_at: r.created_at,
     })
@@ -209,11 +214,18 @@ async function fetchRecentActivities(): Promise<RecentActivity[]> {
   const convClientMap = new Map(convClients?.map(c => [c.id, c.name]) || [])
 
   conversations?.forEach(c => {
+    const stateLabels: Record<string, string> = {
+      menu: 'Nuevo mensaje',
+      viewing_debt: 'Consultó deuda',
+      sent_bank_details: 'Datos bancarios enviados',
+      receipt_received: 'Comprobante recibido',
+      human_agent: 'Asesor atendiendo',
+    }
     activities.push({
       id: c.id,
       type: 'conversation',
-      client_name: convClientMap.get(c.client_id) || 'Desconocido',
-      description: `Conversación iniciada`,
+      client_name: convClientMap.get(c.client_id) || 'Cliente',
+      description: stateLabels[c.state] || 'Conversación',
       status: c.state,
       created_at: c.created_at,
     })

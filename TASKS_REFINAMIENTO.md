@@ -14,10 +14,10 @@
 
 **Tareas:**
 
-- [ ] Corregir `fetchMonthlyCollections()` en `hooks/useDashboard.ts` para usar fechas correctas con timezone.
-- [ ] Si no hay receipts aprobados, usar la tabla `debts` con `status='paid'` como fuente alternativa.
-- [ ] Agregar datos de prueba de receipts aprobados en `seed-test-data.sql`.
-- [ ] Verificar que la gráfica muestra datos reales después de la corrección.
+- [1] Corregir `fetchMonthlyCollections()` en `hooks/useDashboard.ts` para usar fechas correctas con timezone.
+- [1] Si no hay receipts aprobados, usar la tabla `debts` con `status='paid'` como fuente alternativa.
+- [1] Agregar datos de prueba de receipts aprobados en `seed-test-data.sql`.
+- [1] Verificar que la gráfica muestra datos reales después de la corrección.
 
 **Archivos:** `hooks/useDashboard.ts`
 
@@ -34,12 +34,12 @@
 
 **Tareas:**
 
-- [ ] Renombrar "Aging de Vencimiento" → "Antigüedad de Deudas" en `AgingChart.tsx`.
-- [ ] Aplicar gradiente al `Line` en `MonthlyChart.tsx` o eliminar el gradiente no usado.
-- [ ] Corregir todos los acentos faltantes en títulos de gráficas y KPIs.
-- [ ] Mejorar tooltips: formato de moneda, fechas legibles, sin datos crudos.
-- [ ] Añadir subtítulos descriptivos a cada gráfica.
-- [ ] Evaluar si las gráficas necesitan más contraste visual o colores más suaves.
+- [1] Renombrar "Aging de Vencimiento" → "Antigüedad de Deudas" en `AgingChart.tsx`.
+- [1] Aplicar gradiente al `Line` en `MonthlyChart.tsx` o eliminar el gradiente no usado.
+- [1] Corregir todos los acentos faltantes en títulos de gráficas y KPIs.
+- [1] Mejorar tooltips: formato de moneda, fechas legibles, sin datos crudos.
+- [1] Añadir subtítulos descriptivos a cada gráfica.
+- [1] Evaluar si las gráficas necesitan más contraste visual o colores más suaves.
 
 **Archivos:** `components/dashboard/AgingChart.tsx`, `MonthlyChart.tsx`, `DistributionChart.tsx`, `KpiCards.tsx`
 

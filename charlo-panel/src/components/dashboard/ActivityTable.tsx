@@ -4,14 +4,29 @@ interface ActivityTableProps {
   activities: RecentActivity[]
 }
 
-function formatTime(dateStr: string): string {
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+function formatRelativeTime(dateStr: string): string {
   const d = new Date(dateStr)
-  return d.toLocaleDateString('es-MX', {
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  const now = new Date()
+  const diffMs = now.getTime() - d.getTime()
+  const diffMin = Math.floor(diffMs / 60000)
+  const diffHour = Math.floor(diffMin / 60)
+  const diffDay = Math.floor(diffHour / 24)
+
+  if (diffMin < 1) return 'Ahora mismo'
+  if (diffMin < 60) return `Hace ${diffMin} min`
+  if (diffHour < 24) return `Hace ${diffHour}h`
+  if (diffDay === 1) return 'Ayer'
+  if (diffDay < 7) return `Hace ${diffDay} días`
+  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })
 }
 
 function getStatusStyle(status: string) {
@@ -54,7 +69,7 @@ export function ActivityTable({ activities }: ActivityTableProps) {
         <h3 className="text-sm font-semibold text-gray-900">
           Actividad Reciente
         </h3>
-        <p className="text-xs text-gray-400 mt-0.5">Ultimos registros del sistema</p>
+        <p className="text-xs text-gray-400 mt-0.5">Últimos movimientos en tu sistema</p>
       </div>
 
       {activities.length === 0 ? (
@@ -73,13 +88,13 @@ export function ActivityTable({ activities }: ActivityTableProps) {
                   {activity.client_name}
                 </p>
                 <p className="text-[11px] text-gray-400 mt-0.5">
-                  {activity.description} - {formatTime(activity.created_at)}
+                  {activity.description} · {formatRelativeTime(activity.created_at)}
                 </p>
               </div>
               <div className="ml-3 flex items-center gap-2">
                 {activity.amount != null && activity.amount > 0 && (
                   <span className="text-[13px] font-medium text-gray-700">
-                    ${activity.amount.toLocaleString()}
+                    {formatCurrency(activity.amount)}
                   </span>
                 )}
                 <span

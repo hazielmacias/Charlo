@@ -60,7 +60,7 @@ export function Dashboard() {
             Bienvenido, Alebrijes Teotihuacan
           </h1>
           <p className="text-sm text-gray-400 mt-0.5">
-            Resumen general del sistema de cobranza
+            Resumen de tu actividad de cobranza
           </p>
         </div>
         <button

@@ -67,9 +67,9 @@ export function ActivityTable({ activities }: ActivityTableProps) {
     <div className="bg-white rounded-2xl p-5 border border-gray-100">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-gray-900">
-          Actividad Reciente
+          Ultimas Actividades
         </h3>
-        <p className="text-xs text-gray-400 mt-0.5">Últimos movimientos en tu sistema</p>
+        <p className="text-xs text-gray-500 mt-0.5">Resumen de movimientos recientes</p>
       </div>
 
       {activities.length === 0 ? (
@@ -87,7 +87,7 @@ export function ActivityTable({ activities }: ActivityTableProps) {
                 <p className="text-[13px] font-medium text-gray-900 truncate">
                   {activity.client_name}
                 </p>
-                <p className="text-[11px] text-gray-400 mt-0.5">
+                <p className="text-[11px] text-gray-500 mt-0.5">
                   {activity.description} · {formatRelativeTime(activity.created_at)}
                 </p>
               </div>

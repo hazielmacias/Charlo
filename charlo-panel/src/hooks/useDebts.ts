@@ -213,21 +213,4 @@ export function useDebts() {
   }
 }
 
-export function useClients() {
-  const [clients, setClients] = useState<{ id: string; name: string; phone: string }[]>([])
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      const { data } = await supabase
-        .from('clients')
-        .select('id, name, phone')
-        .order('name')
-
-      setClients(data || [])
-    }
-
-    fetchClients()
-  }, [])
-
-  return clients
-}

@@ -49,7 +49,7 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
         <h3 className="text-sm font-semibold text-gray-900">
           Recaudación Mensual
         </h3>
-        <p className="text-xs text-gray-400 mt-0.5">Últimos 6 meses</p>
+        <p className="text-xs text-gray-500 mt-0.5">Últimos 6 meses</p>
       </div>
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">

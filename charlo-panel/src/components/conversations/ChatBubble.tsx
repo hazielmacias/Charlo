@@ -12,9 +12,9 @@ function formatTime(dateStr: string): string {
 
 function StatusIcon({ status }: { status: Message['status'] }) {
   if (status === 'failed') return <span className="text-red-400 text-xs">!</span>
-  if (status === 'read') return <CheckCheck className="w-3.5 h-3.5 text-blue-500" />
-  if (status === 'delivered') return <CheckCheck className="w-3.5 h-3.5 text-gray-400" />
-  if (status === 'sent') return <Check className="w-3.5 h-3.5 text-gray-400" />
+  if (status === 'read') return <CheckCheck className="w-3.5 h-3.5 text-blue-300" />
+  if (status === 'delivered') return <CheckCheck className="w-3.5 h-3.5 text-white/50" />
+  if (status === 'sent') return <Check className="w-3.5 h-3.5 text-white/50" />
   return null
 }
 
@@ -22,42 +22,50 @@ export function ChatBubble({ message }: ChatBubbleProps) {
   const isOutbound = message.direction === 'outbound'
 
   return (
-    <div className={`flex ${isOutbound ? 'justify-end' : 'justify-start'} mb-2`}>
+    <div className={`flex ${isOutbound ? 'justify-end' : 'justify-start'} mb-1 px-2`}>
       <div
         className={`
-          max-w-[80%] lg:max-w-[65%] px-3.5 py-2 rounded-2xl text-sm
+          relative max-w-[75%] lg:max-w-[65%] px-3 py-1.5 rounded-lg text-sm
+          shadow-sm
           ${isOutbound
-            ? 'bg-blue-500 text-white rounded-br-md'
-            : 'bg-gray-100 text-gray-900 rounded-bl-md'
+            ? 'bg-[#dcf8c6]'
+            : 'bg-white'
           }
         `}
+        style={{
+          borderRadius: isOutbound ? '8px 8px 2px 12px' : '8px 8px 12px 2px',
+        }}
       >
         {message.type === 'interactive' && message.content ? (
-          <div className={`font-medium ${isOutbound ? 'text-white' : 'text-blue-600'}`}>
+          <div className="font-medium text-blue-700">
             {message.content.startsWith('menu_') || message.content.startsWith('debt_')
               ? message.content.replace(/_/g, ' ')
               : message.content}
           </div>
         ) : message.type === 'image' ? (
           <div className="flex items-center gap-2">
-            <span className="text-lg">{isOutbound ? '📤' : '📥'}</span>
-            <span className={isOutbound ? 'text-white/90' : 'text-gray-500'}>
+            <span className={isOutbound ? 'text-[#4a9c5d]' : 'text-gray-500'}>
+              {isOutbound ? 'Enviado' : 'Recibido'}
+            </span>
+            <span className={isOutbound ? 'text-[#4a9c5d]/70' : 'text-gray-500/70'}>
               {message.content || 'Imagen'}
             </span>
           </div>
         ) : message.type === 'document' ? (
           <div className="flex items-center gap-2">
-            <span className="text-lg">📄</span>
-            <span className={isOutbound ? 'text-white/90' : 'text-gray-500'}>
+            <span className={isOutbound ? 'text-[#4a9c5d]' : 'text-gray-500'}>
+              {isOutbound ? 'Enviado' : 'Recibido'}
+            </span>
+            <span className={isOutbound ? 'text-[#4a9c5d]/70' : 'text-gray-500/70'}>
               {message.content || 'Documento'}
             </span>
           </div>
         ) : (
-          <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+          <p className="whitespace-pre-wrap leading-relaxed text-gray-800">{message.content}</p>
         )}
 
-        <div className={`flex items-center gap-1 mt-1 ${isOutbound ? 'justify-end' : 'justify-start'}`}>
-          <span className={`text-[10px] ${isOutbound ? 'text-white/60' : 'text-gray-400'}`}>
+        <div className={`flex items-center gap-1 mt-0.5 ${isOutbound ? 'justify-end' : 'justify-start'}`}>
+          <span className={`text-[10px] ${isOutbound ? 'text-[#4a9c5d]/60' : 'text-gray-400'}`}>
             {formatTime(message.created_at)}
           </span>
           {isOutbound && <StatusIcon status={message.status} />}

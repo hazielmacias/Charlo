@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import type { BankAccount, ReminderConfig, BotMessages } from '../types/settings'
+import type { BankAccount, ReminderConfig, BotMessages, ReminderMessages } from '../types/settings'
 
 const defaultReminderConfig: ReminderConfig = {
   id: '',
@@ -9,6 +9,8 @@ const defaultReminderConfig: ReminderConfig = {
   timezone: 'America/Mexico_City',
   frequency_minutes: 15,
   max_attempts: 3,
+  max_overdue_reminders: 5,
+  overdue_interval_days: 2,
   is_active: true,
 }
 
@@ -24,10 +26,19 @@ const defaultBotMessages: BotMessages = {
   error: 'Lo siento, hubo un error. Por favor, intenta de nuevo.',
 }
 
+const defaultReminderMessages: ReminderMessages = {
+  id: '',
+  '3_days': 'Tu pago vence en 3 dias. {description} - Monto: ${amount}',
+  '1_day': 'Tu pago vence mañana. {description} - Monto: ${amount}',
+  due_today: 'Tu pago vence hoy. {description} - Monto: ${amount}',
+  overdue: 'Tu pago esta vencido. {description} - Monto: ${amount}. Por favor realiza tu pago lo antes posible.',
+}
+
 export function useSettings() {
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([])
   const [reminderConfig, setReminderConfig] = useState<ReminderConfig>(defaultReminderConfig)
   const [botMessages, setBotMessages] = useState<BotMessages>(defaultBotMessages)
+  const [reminderMessages, setReminderMessages] = useState<ReminderMessages>(defaultReminderMessages)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -36,7 +47,6 @@ export function useSettings() {
     setError(null)
 
     try {
-      // Fetch bank accounts - handle table not existing
       const { data: banks, error: banksError } = await supabase
         .from('bank_config')
         .select('*')
@@ -48,7 +58,6 @@ export function useSettings() {
         setBankAccounts(banks || [])
       }
 
-      // Fetch settings - handle table not existing
       const { data: settings, error: settingsError } = await supabase
         .from('settings')
         .select('*')
@@ -56,30 +65,34 @@ export function useSettings() {
       if (settingsError) {
         console.warn('settings table error:', settingsError.message)
       } else if (settings) {
-        // Find reminder config
         const reminderSetting = settings.find((s: any) => s.key === 'reminder_config')
         if (reminderSetting) {
           try {
             const parsed = JSON.parse(reminderSetting.value || '{}')
             setReminderConfig({ ...defaultReminderConfig, ...parsed })
           } catch {
-            // Use default
           }
         }
 
-        // Find bot messages
         const messagesSetting = settings.find((s: any) => s.key === 'bot_messages')
         if (messagesSetting) {
           try {
             const parsed = JSON.parse(messagesSetting.value || '{}')
             setBotMessages({ ...defaultBotMessages, ...parsed })
           } catch {
-            // Use default
+          }
+        }
+
+        const reminderMsgsSetting = settings.find((s: any) => s.key === 'reminder_messages')
+        if (reminderMsgsSetting) {
+          try {
+            const parsed = JSON.parse(reminderMsgsSetting.value || '{}')
+            setReminderMessages({ ...defaultReminderMessages, ...parsed })
+          } catch {
           }
         }
       }
     } catch (err) {
-      // Don't set error, just log it - we have defaults
       console.warn('Settings fetch warning:', err)
     } finally {
       setLoading(false)
@@ -90,7 +103,6 @@ export function useSettings() {
     fetchSettings()
   }, [])
 
-  // Bank Account CRUD
   const createBankAccount = async (data: Omit<BankAccount, 'id' | 'created_at' | 'updated_at'>) => {
     const { error } = await supabase.from('bank_config').insert(data)
     if (error) throw error
@@ -113,7 +125,6 @@ export function useSettings() {
     await updateBankAccount(id, { is_active })
   }
 
-  // Reminder Config - save to localStorage as fallback
   const updateReminderConfig = async (config: Partial<ReminderConfig>) => {
     const newConfig = { ...reminderConfig, ...config }
     setReminderConfig(newConfig)
@@ -124,12 +135,10 @@ export function useSettings() {
         .upsert({ key: 'reminder_config', value: JSON.stringify(newConfig) }, { onConflict: 'key' })
       if (error) throw error
     } catch {
-      // Save to localStorage as fallback
       localStorage.setItem('charlo_reminder_config', JSON.stringify(newConfig))
     }
   }
 
-  // Bot Messages - save to localStorage as fallback
   const updateBotMessages = async (messages: Partial<BotMessages>) => {
     const newMessages = { ...botMessages, ...messages }
     setBotMessages(newMessages)
@@ -140,8 +149,21 @@ export function useSettings() {
         .upsert({ key: 'bot_messages', value: JSON.stringify(newMessages) }, { onConflict: 'key' })
       if (error) throw error
     } catch {
-      // Save to localStorage as fallback
       localStorage.setItem('charlo_bot_messages', JSON.stringify(newMessages))
+    }
+  }
+
+  const updateReminderMessages = async (messages: Partial<ReminderMessages>) => {
+    const newMessages = { ...reminderMessages, ...messages }
+    setReminderMessages(newMessages)
+
+    try {
+      const { error } = await supabase
+        .from('settings')
+        .upsert({ key: 'reminder_messages', value: JSON.stringify(newMessages) }, { onConflict: 'key' })
+      if (error) throw error
+    } catch {
+      localStorage.setItem('charlo_reminder_messages', JSON.stringify(newMessages))
     }
   }
 
@@ -149,6 +171,7 @@ export function useSettings() {
     bankAccounts,
     reminderConfig,
     botMessages,
+    reminderMessages,
     loading,
     error,
     createBankAccount,
@@ -157,6 +180,7 @@ export function useSettings() {
     toggleBankAccount,
     updateReminderConfig,
     updateBotMessages,
+    updateReminderMessages,
     refetch: fetchSettings,
   }
 }

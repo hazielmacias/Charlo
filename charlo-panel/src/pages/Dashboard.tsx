@@ -59,9 +59,9 @@ export function Dashboard() {
           <h1 className="text-xl font-semibold text-gray-900">
             Bienvenido, Alebrijes Teotihuacan
           </h1>
-          <p className="text-sm text-gray-400 mt-0.5">
-            Resumen de tu actividad de cobranza
-          </p>
+<p className="text-sm text-gray-500 mt-0.5">
+             Resumen de tu actividad de cobranza
+           </p>
         </div>
         <button
           onClick={() => refetch()}

@@ -33,6 +33,8 @@ export function ReminderSection({ config, onUpdate }: ReminderSectionProps) {
   const [timezone, setTimezone] = useState(config?.timezone || 'America/Mexico_City')
   const [frequency, setFrequency] = useState(config?.frequency_minutes || 15)
   const [maxAttempts, setMaxAttempts] = useState(config?.max_attempts || 3)
+  const [maxOverdue, setMaxOverdue] = useState(config?.max_overdue_reminders || 5)
+  const [overdueInterval, setOverdueInterval] = useState(config?.overdue_interval_days || 2)
   const [isActive, setIsActive] = useState(config?.is_active ?? true)
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -44,6 +46,8 @@ export function ReminderSection({ config, onUpdate }: ReminderSectionProps) {
       setTimezone(config.timezone)
       setFrequency(config.frequency_minutes)
       setMaxAttempts(config.max_attempts)
+      setMaxOverdue(config.max_overdue_reminders ?? 5)
+      setOverdueInterval(config.overdue_interval_days ?? 2)
       setIsActive(config.is_active)
     }
   }, [config])
@@ -57,6 +61,8 @@ export function ReminderSection({ config, onUpdate }: ReminderSectionProps) {
         timezone,
         frequency_minutes: frequency,
         max_attempts: maxAttempts,
+        max_overdue_reminders: maxOverdue,
+        overdue_interval_days: overdueInterval,
         is_active: isActive,
       })
       setSaved(true)
@@ -168,6 +174,34 @@ export function ReminderSection({ config, onUpdate }: ReminderSectionProps) {
           <p className="text-xs text-gray-400 mt-1">Veces que se intenta enviar antes de marcar como fallido</p>
         </div>
 
+        {/* Max overdue reminders */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Recordatorios Vencidos</label>
+          <input
+            type="number"
+            min="1"
+            max="20"
+            value={maxOverdue}
+            onChange={(e) => setMaxOverdue(parseInt(e.target.value) || 5)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+          <p className="text-xs text-gray-400 mt-1">Máximo de recordatorios después del vencimiento</p>
+        </div>
+
+        {/* Overdue interval */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Intervalo Vencidos (días)</label>
+          <input
+            type="number"
+            min="1"
+            max="7"
+            value={overdueInterval}
+            onChange={(e) => setOverdueInterval(parseInt(e.target.value) || 2)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+          <p className="text-xs text-gray-400 mt-1">Días entre cada recordatorio vencido</p>
+        </div>
+
         {/* Save button */}
         <div className="flex items-center gap-3 pt-4">
           <button
@@ -176,7 +210,7 @@ export function ReminderSection({ config, onUpdate }: ReminderSectionProps) {
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
           >
             <Save className="w-4 h-4" />
-            {loading ? 'Guardando...' : saved ? 'Guardado ✓' : 'Guardar Cambios'}
+            {loading ? 'Guardando...' : saved ? 'Guardado' : 'Guardar Cambios'}
           </button>
           {saved && (
             <span className="text-sm text-emerald-600">Cambios guardados</span>

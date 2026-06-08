@@ -139,7 +139,7 @@ export function ClientDetail() {
             <div>
               <p className="text-[11px] text-gray-400">Ultimo Contacto</p>
               <p className="text-[13px] font-medium text-gray-900">
-                {client.last_contact ? formatDate(client.last_contact) : '--'}
+                {client.last_contact_at ? formatDate(client.last_contact_at) : '--'}
               </p>
             </div>
           </div>

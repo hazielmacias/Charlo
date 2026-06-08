@@ -79,7 +79,7 @@ export function DebtModal({ isOpen, onClose, onSubmit }: DebtModalProps) {
   if (!isOpen) return null
 
   const handleFormSubmit = async (data: DebtForm) => {
-    await onSubmit(data)
+    await onSubmit({ ...data, amount: Number(data.amount) })
     reset()
     setSelectedClient(null)
     setSearchTerm('')

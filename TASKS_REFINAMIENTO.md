@@ -51,12 +51,12 @@
 
 **Tareas:**
 
-- [ ] Rediseñar la página de login con un layout más limpio y profesional.
-- [ ] Crear un logo SVG personalizado para Charló (no el rayo genérico).
-- [ ] Eliminar los stats genéricos del panel izquierdo ("100+ Clients", "95% Success") — no son reales.
-- [ ] Mejorar la paleta de colores del panel izquierdo (gradiente más sutil).
-- [ ] Asegurar que el formulario sea accesible y tenga buen contraste.
-- [ ] Verificar responsive en móvil.
+- [1] Rediseñar la página de login con un layout más limpio y profesional.
+- [1] Crear un logo SVG personalizado para Charló (no el rayo genérico).
+- [1] Eliminar los stats genéricos del panel izquierdo ("100+ Clients", "95% Success") — no son reales.
+- [1] Mejorar la paleta de colores del panel izquierdo (gradiente más sutil).
+- [1] Asegurar que el formulario sea accesible y tenga buen contraste.
+- [1] Verificar responsive en móvil.
 
 **Archivos:** `pages/Login.tsx`, `public/favicon.svg`
 
@@ -74,20 +74,20 @@
 
 **Tareas:**
 
-- [ ] Crear función/migración que genere automáticamente records en la tabla `reminders` cuando se crea una deuda:
+- [1] Crear función/migración que genere automáticamente records en la tabla `reminders` cuando se crea una deuda:
   - 3 días antes de `due_date` → "Tu pago vence en 3 días"
   - 1 día antes → "Tu pago vence mañana"
   - Día de vencimiento → "Tu pago vence hoy"
   - Después de vencimiento → repetir cada 2 días con mensaje de "pago vencido"
-- [ ] Modificar `send-reminders/index.ts` para usar mensajes diferenciados según el tipo de recordatorio.
-- [ ] Crear mensajes personalizables en la tabla `settings` para cada tipo de recordatorio:
+- [1] Modificar `send-reminders/index.ts` para usar mensajes diferenciados según el tipo de recordatorio.
+- [1] Crear mensajes personalizables en la tabla `settings` para cada tipo de recordatorio:
   - `reminder_3_days`
   - `reminder_1_day`
   - `reminder_due_today`
   - `reminder_overdue`
-- [ ] Actualizar `BotMessagesSection.tsx` en Settings para editar estos mensajes.
-- [ ] Limitar el número máximo de recordatorios post-vencimiento (configurable).
-- [ ] Cuando el cliente pague (comprobante aprobado), cancelar los recordatorios pendientes de esa deuda.
+- [1] Actualizar `BotMessagesSection.tsx` en Settings para editar estos mensajes.
+- [1] Limitar el número máximo de recordatorios post-vencimiento (configurable).
+- [1] Cuando el cliente pague (comprobante aprobado), cancelar los recordatorios pendientes de esa deuda.
 
 **Archivos:** `supabase/functions/send-reminders/index.ts`, `hooks/useSettings.ts`, `components/settings/BotMessagesSection.tsx`, migración SQL nueva
 
@@ -99,17 +99,17 @@
 
 **Tareas:**
 
-- [ ] Rediseñar la página completamente como réplica de WhatsApp Web:
+- [1] Rediseñar la página completamente como réplica de WhatsApp Web:
   - Panel izquierdo: barra de búsqueda arriba, lista de chats con avatar circular, nombre, último mensaje, hora, badge de estado.
   - Panel derecho: header con avatar + nombre + estado, área de mensajes con burbujas estilo WhatsApp (colas de burbuja), barra de input abajo.
   - Fondo del chat: color verde claro sutil o pattern de WhatsApp.
-- [ ] Corregir el bug de `border-3` en `ConversationList.tsx` (no es clase Tailwind válida).
-- [ ] Hacer que el input se habilite cuando el asesor toma el chat (modo `human_agent`).
-- [ ] Mostrar indicador claro de "Modo asesor activo" cuando el bot está pausado.
-- [ ] Añadir botón "Devolver al bot" para reanudar el flujo automático.
-- [ ] Corregir el cálculo de altura del chat (`h-[calc(100vh-8rem)]` puede fallar).
-- [ ] Asegurar que el scroll automático funcione correctamente.
-- [ ] Verificar responsive: en móvil debe mostrarse solo la lista o solo el chat, no ambos.
+- [1] Corregir el bug de `border-3` en `ConversationList.tsx` (no es clase Tailwind válida).
+- [1] Hacer que el input se habilite cuando el asesor toma el chat (modo `human_agent`).
+- [1] Mostrar indicador claro de "Modo asesor activo" cuando el bot está pausado.
+- [1] Añadir botón "Devolver al bot" para reanudar el flujo automático.
+- [1] Corregir el cálculo de altura del chat (`h-[calc(100vh-8rem)]` puede fallar).
+- [1] Asegurar que el scroll automático funcione correctamente.
+- [1] Verificar responsive: en móvil debe mostrarse solo la lista o solo el chat, no ambos.
 
 **Archivos:** `pages/Conversations.tsx`, `components/conversations/ChatPanel.tsx`, `ConversationList.tsx`, `ChatBubble.tsx`, `MessageInput.tsx`
 
@@ -121,14 +121,14 @@
 
 **Tareas:**
 
-- [ ] Verificar que `ClientModal.tsx` envía correctamente los datos al crear un cliente.
-- [ ] Verificar que el campo `timezone` del formulario existe en la tabla `clients` de producción (no existe — columna eliminada en producción).
-- [ ] Ajustar `ClientModal.tsx` para que no envíe `timezone` si la columna no existe.
-- [ ] Verificar que `DebtModal.tsx` crea deudas correctamente.
-- [ ] Verificar que el hook `useClients.ts` → `createClient()` no falla por campos inexistentes.
-- [ ] Verificar que el hook `useDebts.ts` → `createDebt()` funciona.
-- [ ] Probar el flujo completo: crear cliente → crear deuda → verificar en BD.
-- [ ] Si el problema es RLS, ajustar las políticas para permitir INSERT desde el panel autenticado.
+- [1] Verificar que `ClientModal.tsx` envía correctamente los datos al crear un cliente.
+- [1] Verificar que el campo `timezone` del formulario existe en la tabla `clients` de producción (no existe — columna eliminada en producción).
+- [1] Ajustar `ClientModal.tsx` para que no envíe `timezone` si la columna no existe.
+- [1] Verificar que `DebtModal.tsx` crea deudas correctamente.
+- [1] Verificar que el hook `useClients.ts` → `createClient()` no falla por campos inexistentes.
+- [1] Verificar que el hook `useDebts.ts` → `createDebt()` funciona.
+- [1] Probar el flujo completo: crear cliente → crear deuda → verificar en BD.
+- [1] Si el problema es RLS, ajustar las políticas para permitir INSERT desde el panel autenticado.
 
 **Archivos:** `components/clients/ClientModal.tsx`, `components/debts/DebtModal.tsx`, `hooks/useClients.ts`, `hooks/useDebts.ts`
 
@@ -140,16 +140,16 @@
 
 **Tareas generales:**
 
-- [ ] Eliminar todos los emojis de la interfaz (no usar emojis en ningún componente).
-- [ ] Revisar y mejorar el espaciado de todas las páginas (padding, margins, gaps).
-- [ ] Añadir estados vacíos útiles con íconos de lucide-react (no emojis).
-- [ ] Mejorar las tarjetas de KPIs con iconografía más expresiva.
-- [ ] Revisar que todos los botones tengan estados hover/active/disabled consistentes.
-- [ ] Asegurar que las tablas tengan filas alternas o hover states para mejor legibilidad.
-- [ ] Revisar el contraste de colores en todos los textos secundarios (muchos son `text-gray-400` que puede ser muy claro).
-- [ ] Añadir separadores visuales entre secciones donde sea necesario.
-- [ ] Revisar que los modales tengan el mismo estilo visual en todas las páginas.
-- [ ] Verificar que el sidebar no se superponga mal en resoluciones intermedias (tablet).
+- [1] Eliminar todos los emojis de la interfaz (no usar emojis en ningún componente).
+- [1] Revisar y mejorar el espaciado de todas las páginas (padding, margins, gaps).
+- [1] Añadir estados vacíos útiles con íconos de lucide-react (no emojis).
+- [1] Mejorar las tarjetas de KPIs con iconografía más expresiva.
+- [1] Revisar que todos los botones tengan estados hover/active/disabled consistentes.
+- [1] Asegurar que las tablas tengan filas alternas o hover states para mejor legibilidad.
+- [1] Revisar el contraste de colores en todos los textos secundarios (muchos son `text-gray-400` que puede ser muy claro).
+- [1] Añadir separadores visuales entre secciones donde sea necesario.
+- [1] Revisar que los modales tengan el mismo estilo visual en todas las páginas.
+- [1] Verificar que el sidebar no se superponga mal en resoluciones intermedias (tablet).
 
 **Archivos:** Todos los componentes de UI.
 

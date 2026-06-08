@@ -1,60 +1,39 @@
 import { useState, useEffect } from 'react'
 import { Save, RotateCcw } from 'lucide-react'
-import type { BotMessages } from '../../types/settings'
+import type { ReminderMessages } from '../../types/settings'
 
-interface BotMessagesSectionProps {
-  messages: BotMessages | null
-  onUpdate: (messages: Partial<BotMessages>) => Promise<void>
+interface ReminderMessagesSectionProps {
+  messages: ReminderMessages | null
+  onUpdate: (messages: Partial<ReminderMessages>) => Promise<void>
 }
 
-const defaultMessages: Omit<BotMessages, 'id'> = {
-  welcome: '¡Hola {name}! Soy Charló, tu asistente de cobranza. ¿En qué puedo ayudarte?',
-  menu: 'Por favor, selecciona una opción:',
-  debt_info: 'Estas son tus deudas pendientes:',
-  payment_instructions: 'Aquí tienes los datos para realizar tu pago:',
-  receipt_confirmation: 'Hemos recibido tu comprobante. Lo revisaremos pronto.',
-  agent_transfer: 'Un agente se pondrá en contacto contigo.',
-  outside_hours: 'Nuestro horario de atención es de 8:00 AM a 8:00 PM.',
-  error: 'Lo siento, hubo un error. Por favor, intenta de nuevo.',
+const defaultMessages = {
+  '3_days': 'Tu pago vence en 3 dias. {description} - Monto: ${amount}',
+  '1_day': 'Tu pago vence mañana. {description} - Monto: ${amount}',
+  due_today: 'Tu pago vence hoy. {description} - Monto: ${amount}',
+  overdue: 'Tu pago esta vencido. {description} - Monto: ${amount}. Por favor realiza tu pago lo antes posible.',
 }
 
-const messageLabels: Record<string, { label: string; description: string; placeholder?: string }> = {
-  welcome: {
-    label: 'Mensaje de Bienvenida',
-    description: 'Se envía cuando el cliente inicia conversación',
-    placeholder: 'Usa {name} para el nombre del cliente',
+const messageLabels: Record<string, { label: string; description: string }> = {
+  '3_days': {
+    label: '3 Días Antes',
+    description: 'Se envía 3 días antes de la fecha de vencimiento',
   },
-  menu: {
-    label: 'Menú Principal',
-    description: 'Texto del menú de opciones',
+  '1_day': {
+    label: '1 Día Antes',
+    description: 'Se envía 1 día antes de la fecha de vencimiento',
   },
-  debt_info: {
-    label: 'Información de Deuda',
-    description: 'Se envía al consultar deudas',
+  due_today: {
+    label: 'Día de Vencimiento',
+    description: 'Se envía el día que vence la deuda',
   },
-  payment_instructions: {
-    label: 'Instrucciones de Pago',
-    description: 'Datos bancarios y monto a pagar',
-  },
-  receipt_confirmation: {
-    label: 'Confirmación de Comprobante',
-    description: 'Al recibir un comprobante de pago',
-  },
-  agent_transfer: {
-    label: 'Transferencia a Agente',
-    description: 'Al transferir a un agente humano',
-  },
-  outside_hours: {
-    label: 'Fuera de Horario',
-    description: 'Cuando el cliente escribe fuera del horario laboral',
-  },
-  error: {
-    label: 'Mensaje de Error',
-    description: 'Error general del bot',
+  overdue: {
+    label: 'Recordatorio Vencido',
+    description: 'Se envía después de la fecha de vencimiento',
   },
 }
 
-export function BotMessagesSection({ messages, onUpdate }: BotMessagesSectionProps) {
+export function ReminderMessagesSection({ messages, onUpdate }: ReminderMessagesSectionProps) {
   const [editedMessages, setEditedMessages] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -76,7 +55,7 @@ export function BotMessagesSection({ messages, onUpdate }: BotMessagesSectionPro
   const handleSave = async () => {
     setLoading(true)
     try {
-      await onUpdate(editedMessages as Partial<BotMessages>)
+      await onUpdate(editedMessages as Partial<ReminderMessages>)
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch (err) {
@@ -96,12 +75,12 @@ export function BotMessagesSection({ messages, onUpdate }: BotMessagesSectionPro
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-100">
-        <h3 className="text-lg font-medium text-gray-900">Mensajes del Bot</h3>
-        <p className="text-sm text-gray-500 mt-1">Personaliza los mensajes que envía Charló</p>
+        <h3 className="text-lg font-medium text-gray-900">Mensajes de Recordatorios</h3>
+        <p className="text-sm text-gray-500 mt-1">Personaliza los mensajes según el tipo de recordatorio</p>
       </div>
 
       <div className="p-6 space-y-6">
-        {Object.entries(messageLabels).map(([key, { label, description, placeholder }]) => (
+        {Object.entries(messageLabels).map(([key, { label, description }]) => (
           <div key={key}>
             <div className="flex items-center justify-between mb-1">
               <label className="block text-sm font-medium text-gray-700">{label}</label>
@@ -119,7 +98,7 @@ export function BotMessagesSection({ messages, onUpdate }: BotMessagesSectionPro
               onChange={(e) => handleChange(key, e.target.value)}
               rows={2}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-              placeholder={placeholder}
+              placeholder="Usa {description} para la descripción y ${amount} para el monto"
             />
           </div>
         ))}

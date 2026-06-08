@@ -33,12 +33,12 @@ export function Conversations() {
   }
 
   return (
-    <div className="h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)]">
-      <div className="bg-white rounded-2xl border border-gray-100 h-full flex overflow-hidden">
+    <div className="h-dvh lg:h-[calc(100vh-8rem)] flex flex-col">
+      <div className="flex-1 flex overflow-hidden rounded-2xl border border-gray-100 bg-white">
         {/* Left: Conversation List */}
         <div className={`
-          w-full lg:w-80 xl:w-96 flex-shrink-0 border-r border-gray-100 flex flex-col
-          ${selectedId ? 'hidden lg:flex' : 'flex'}
+          w-full md:w-80 xl:w-96 flex-shrink-0 border-r border-gray-100 flex flex-col bg-white
+          ${selectedId ? 'hidden md:flex' : 'flex'}
         `}>
           {/* Header */}
           <div className="flex-shrink-0 px-4 py-3 border-b border-gray-100">
@@ -104,8 +104,8 @@ export function Conversations() {
 
         {/* Right: Chat Panel */}
         <div className={`
-          flex-1 flex flex-col min-w-0
-          ${!selectedId ? 'hidden lg:flex' : 'flex'}
+          flex-1 flex flex-col min-w-0 bg-[#e5ddd5]
+          ${!selectedId ? 'hidden md:flex' : 'flex'}
         `}>
           <ChatPanel
             conversation={conversation}

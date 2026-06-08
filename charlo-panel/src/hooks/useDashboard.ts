@@ -257,7 +257,7 @@ export function useDashboard() {
 
       setData({ stats, aging, monthly, distribution, activities })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar dashboard')
+      setError(err instanceof Error ? err.message : 'Error al cargar datos')
     } finally {
       setLoading(false)
     }

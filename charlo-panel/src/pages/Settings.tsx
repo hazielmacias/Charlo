@@ -2,6 +2,7 @@ import { useSettings } from '../hooks/useSettings'
 import { BankAccountsSection } from '../components/settings/BankAccountsSection'
 import { ReminderSection } from '../components/settings/ReminderSection'
 import { BotMessagesSection } from '../components/settings/BotMessagesSection'
+import { ReminderMessagesSection } from '../components/settings/ReminderMessagesSection'
 import { AccountSection } from '../components/settings/AccountSection'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 
@@ -10,6 +11,7 @@ export function Settings() {
     bankAccounts,
     reminderConfig,
     botMessages,
+    reminderMessages,
     loading,
     error,
     createBankAccount,
@@ -18,6 +20,7 @@ export function Settings() {
     toggleBankAccount,
     updateReminderConfig,
     updateBotMessages,
+    updateReminderMessages,
   } = useSettings()
 
   if (loading) {
@@ -77,6 +80,12 @@ export function Settings() {
         <BotMessagesSection
           messages={botMessages}
           onUpdate={updateBotMessages}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <ReminderMessagesSection
+          messages={reminderMessages}
+          onUpdate={updateReminderMessages}
         />
       </ErrorBoundary>
     </div>

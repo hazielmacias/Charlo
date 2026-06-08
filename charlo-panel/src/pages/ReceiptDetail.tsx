@@ -179,7 +179,7 @@ export function ReceiptDetail() {
           </button>
           <div>
             <h1 className="text-xl font-semibold text-gray-900">Detalle del Comprobante</h1>
-            <p className="text-sm text-gray-400">ID: {receipt.id.slice(0, 8)}</p>
+            <p className="text-sm text-gray-400">Comprobante de pago</p>
           </div>
         </div>
         <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${statusStyles[receipt.status]}`}>

@@ -100,7 +100,7 @@ export function AccountSection() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
             >
               <Save className="w-4 h-4" />
-              {emailLoading ? 'Guardando...' : emailSaved ? 'Guardado ✓' : 'Actualizar'}
+              {emailLoading ? 'Guardando...' : emailSaved ? 'Guardado' : 'Actualizar'}
             </button>
           </div>
         </div>
@@ -132,7 +132,7 @@ export function AccountSection() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
             >
               <Lock className="w-4 h-4" />
-              {passwordLoading ? 'Guardando...' : passwordSaved ? 'Contraseña Actualizada ✓' : 'Cambiar Contraseña'}
+              {passwordLoading ? 'Guardando...' : passwordSaved ? 'Actualizada' : 'Cambiar Contraseña'}
             </button>
           </div>
         </div>

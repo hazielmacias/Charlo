@@ -9,8 +9,7 @@ const clientSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
   phone: z.string().min(10, 'Teléfono inválido').max(15),
   email: z.string().email('Email inválido').optional().or(z.literal('')),
-  status: z.enum(['active', 'inactive', 'blocked']),
-  timezone: z.string(),
+  status: z.enum(['active', 'inactive', 'contacted']),
 })
 
 type ClientForm = z.infer<typeof clientSchema>
@@ -21,26 +20,6 @@ interface ClientModalProps {
   client?: Client | null
   onSubmit: (data: ClientForm) => Promise<void>
 }
-
-const timezones = [
-  'America/Mexico_City',
-  'America/Buenos_Aires',
-  'America/Santiago',
-  'America/Bogota',
-  'America/Lima',
-  'America/Caracas',
-  'America/Guayaquil',
-  'America/Montevideo',
-  'America/Asuncion',
-  'America/La_Paz',
-  'America/Guatemala',
-  'America/Tegucigalpa',
-  'America/Managua',
-  'America/Costa_Rica',
-  'America/Panama',
-  'America/Sao_Paulo',
-  'America/Manaus',
-]
 
 export function ClientModal({ isOpen, onClose, client, onSubmit }: ClientModalProps) {
   const {
@@ -55,7 +34,6 @@ export function ClientModal({ isOpen, onClose, client, onSubmit }: ClientModalPr
       phone: '',
       email: '',
       status: 'active',
-      timezone: 'America/Mexico_City',
     },
   })
 
@@ -66,7 +44,6 @@ export function ClientModal({ isOpen, onClose, client, onSubmit }: ClientModalPr
         phone: client.phone,
         email: client.email || '',
         status: client.status,
-        timezone: client.timezone || 'America/Mexico_City',
       })
     } else {
       reset({
@@ -74,7 +51,6 @@ export function ClientModal({ isOpen, onClose, client, onSubmit }: ClientModalPr
         phone: '',
         email: '',
         status: 'active',
-        timezone: 'America/Mexico_City',
       })
     }
   }, [client, reset])
@@ -173,24 +149,7 @@ export function ClientModal({ isOpen, onClose, client, onSubmit }: ClientModalPr
             >
               <option value="active">Activo</option>
               <option value="inactive">Inactivo</option>
-              <option value="blocked">Bloqueado</option>
-            </select>
-          </div>
-
-          {/* Timezone */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Zona Horaria
-            </label>
-            <select
-              {...register('timezone')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            >
-              {timezones.map((tz) => (
-                <option key={tz} value={tz}>
-                  {tz.replace('America/', '')}
-                </option>
-              ))}
+              <option value="contacted">Contactado</option>
             </select>
           </div>
 

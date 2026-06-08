@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CheckCircle, Trash2, MoreVertical, ExternalLink } from 'lucide-react'
+import { CheckCircle, Trash2, MoreVertical, ExternalLink, FileX } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Debt } from '../../types/debt'
 
@@ -44,8 +44,12 @@ export function DebtTable({ debts, onMarkPaid, onDelete }: DebtTableProps) {
 
   if (debts.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+      <div className="bg-white rounded-xl border border-gray-100 p-12 text-center">
+        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <FileX className="w-6 h-6 text-gray-400" />
+        </div>
         <p className="text-gray-500 text-sm">No se encontraron deudas</p>
+        <p className="text-gray-400 text-xs mt-1">Crea una deuda para un cliente existente</p>
       </div>
     )
   }

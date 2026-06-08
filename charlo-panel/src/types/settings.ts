@@ -17,7 +17,17 @@ export interface ReminderConfig {
   timezone: string
   frequency_minutes: number
   max_attempts: number
+  max_overdue_reminders: number
+  overdue_interval_days: number
   is_active: boolean
+}
+
+export interface ReminderMessages {
+  id: string
+  '3_days': string
+  '1_day': string
+  due_today: string
+  overdue: string
 }
 
 export interface BotMessages {
@@ -36,4 +46,5 @@ export interface AppSettings {
   bank_accounts: BankAccount[]
   reminder_config: ReminderConfig
   bot_messages: BotMessages
+  reminder_messages: ReminderMessages
 }

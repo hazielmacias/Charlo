@@ -52,7 +52,7 @@ export function DistributionChart({ data }: DistributionChartProps) {
         <h3 className="text-sm font-semibold text-gray-900">
           Estado de Cobros
         </h3>
-        <p className="text-xs text-gray-400 mt-0.5">Distribución actual de deudas</p>
+        <p className="text-xs text-gray-500 mt-0.5">Distribución actual de deudas</p>
       </div>
       <div className="h-56 relative">
         <ResponsiveContainer width="100%" height="100%">
@@ -79,7 +79,7 @@ export function DistributionChart({ data }: DistributionChartProps) {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ paddingBottom: '40px' }}>
             <div className="text-center">
               <p className="text-2xl font-semibold text-gray-900">{total}</p>
-              <p className="text-[10px] text-gray-400 mt-0.5">Total</p>
+              <p className="text-[10px] text-gray-500 mt-0.5">Total</p>
             </div>
           </div>
         )}

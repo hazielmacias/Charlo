@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Pencil, Trash2, Eye, MoreVertical } from 'lucide-react'
+import { Pencil, Trash2, Eye, MoreVertical, Users } from 'lucide-react'
 import { useState } from 'react'
 import type { Client } from '../../types/client'
 
@@ -30,13 +30,13 @@ function formatDate(dateStr?: string): string {
 const statusStyles: Record<string, string> = {
   active: 'bg-emerald-50 text-emerald-700',
   inactive: 'bg-gray-100 text-gray-600',
-  blocked: 'bg-red-50 text-red-700',
+  contacted: 'bg-blue-50 text-blue-700',
 }
 
 const statusLabels: Record<string, string> = {
   active: 'Activo',
   inactive: 'Inactivo',
-  blocked: 'Bloqueado',
+  contacted: 'Contactado',
 }
 
 export function ClientTable({ clients, onEdit, onDelete }: ClientTableProps) {
@@ -45,8 +45,12 @@ export function ClientTable({ clients, onEdit, onDelete }: ClientTableProps) {
 
   if (clients.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+      <div className="bg-white rounded-xl border border-gray-100 p-12 text-center">
+        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <Users className="w-6 h-6 text-gray-400" />
+        </div>
         <p className="text-gray-500 text-sm">No se encontraron clientes</p>
+        <p className="text-gray-400 text-xs mt-1">Crea un cliente para comenzar</p>
       </div>
     )
   }
@@ -105,7 +109,7 @@ export function ClientTable({ clients, onEdit, onDelete }: ClientTableProps) {
                   </span>
                 </td>
                 <td className="px-5 py-3 text-sm text-gray-500">
-                  {formatDate(client.last_contact)}
+                  {formatDate(client.last_contact_at)}
                 </td>
                 <td className="px-5 py-3 text-right">
                   <div className="flex items-center justify-end gap-1">

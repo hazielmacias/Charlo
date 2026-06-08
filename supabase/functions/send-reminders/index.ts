@@ -5,12 +5,17 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 }
 
-const MAX_ATTEMPTS = 3
 const REMINDER_START_HOUR = 8
 const REMINDER_END_HOUR = 20
 const DEFAULT_TIMEZONE = "America/Mexico_City"
 
-// Get current hour in a timezone
+const DEFAULT_REMINDER_MESSAGES: Record<string, string> = {
+  "3_days": "Tu pago vence en 3 dias. {description} - Monto: ${amount}",
+  "1_day": "Tu pago vence mañana. {description} - Monto: ${amount}",
+  "due_today": "Tu pago vence hoy. {description} - Monto: ${amount}",
+  "overdue": "Tu pago esta vencido. {description} - Monto: ${amount}. Por favor realiza tu pago lo antes posible.",
+}
+
 function getLocalHour(date: Date, timezone: string): number {
   try {
     const formatter = new Intl.DateTimeFormat("en-US", {
@@ -20,11 +25,10 @@ function getLocalHour(date: Date, timezone: string): number {
     })
     return parseInt(formatter.format(date))
   } catch {
-    return new Date().getHours() // Fallback to UTC
+    return new Date().getHours()
   }
 }
 
-// Get next valid send time (8:00 AM in timezone)
 function getNextValidTime(timezone: string): Date {
   const now = new Date()
   const formatter = new Intl.DateTimeFormat("en-US", {
@@ -38,21 +42,15 @@ function getNextValidTime(timezone: string): Date {
     timeZone: timezone,
   })
 
-  // Get current time in timezone
   const parts = formatter.formatToParts(now)
-  const year = parseInt(parts.find((p) => p.type === "year")?.value || "0")
-  const month = parseInt(parts.find((p) => p.type === "month")?.value || "1")
-  const day = parseInt(parts.find((p) => p.type === "day")?.value || "1")
   const hour = parseInt(parts.find((p) => p.type === "hour")?.value || "0")
 
-  // Create date for tomorrow 8:00 AM if past 20:00, or today 8:00 AM if before 8:00
   const nextDate = new Date(now)
   if (hour >= REMINDER_END_HOUR) {
     nextDate.setDate(nextDate.getDate() + 1)
   }
   nextDate.setHours(REMINDER_START_HOUR, 0, 0, 0)
 
-  // Adjust for timezone offset
   const timezoneDate = new Date(nextDate.toLocaleString("en-US", { timeZone: timezone }))
   const utcDate = new Date(nextDate.toLocaleString("en-US", { timeZone: "UTC" }))
   const offset = timezoneDate.getTime() - utcDate.getTime()
@@ -60,18 +58,41 @@ function getNextValidTime(timezone: string): Date {
   return new Date(nextDate.getTime() + offset)
 }
 
-// Send reminder message via whatsapp-send
+async function getReminderMessages(supabase: any): Promise<Record<string, string>> {
+  const { data } = await supabase
+    .from("settings")
+    .select("value")
+    .eq("key", "reminder_messages")
+    .single()
+
+  if (data?.value) {
+    try {
+      return { ...DEFAULT_REMINDER_MESSAGES, ...data.value }
+    } catch {
+      return DEFAULT_REMINDER_MESSAGES
+    }
+  }
+  return DEFAULT_REMINDER_MESSAGES
+}
+
+function buildReminderMessage(
+  reminderType: string,
+  clientName: string,
+  debtDescription: string,
+  amount: number,
+  messages: Record<string, string>
+): string {
+  const template = messages[reminderType] || messages["due_today"] || ""
+  return `Hola ${clientName}, te recordamos que tienes un pago pendiente:\n\n${template.replace("{description}", debtDescription).replace("${amount}", amount.toLocaleString("es-MX"))}\n\n¿Ya realizaste el pago? Responde con *SI* para enviarnos tu comprobante.`
+}
+
 async function sendReminderMessage(
   supabase: any,
   phone: string,
-  clientName: string,
-  debtDescription: string,
-  amount: number
+  message: string
 ): Promise<boolean> {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
-
-  const message = `Hola ${clientName}, te recordamos que tienes un pago pendiente:\n\n📝 ${debtDescription}\n💰 Monto: $${amount.toLocaleString("es-MX")}\n\n¿Ya realizaste el pago? Responde con *SÍ* para enviarnos tu comprobante.`
 
   const response = await fetch(`${supabaseUrl}/functions/v1/whatsapp-send`, {
     method: "POST",
@@ -89,14 +110,17 @@ async function sendReminderMessage(
   return response.ok
 }
 
-// Process a single reminder
-async function processReminder(supabase: any, reminder: any): Promise<string> {
-  const { id, client_id, debt_id, attempts } = reminder
+async function processReminder(
+  supabase: any,
+  reminder: any,
+  messages: Record<string, string>
+): Promise<string> {
+  const { id, reminder_type, client_id, debt_id, attempts } = reminder
   const client = reminder.clients
   const debt = reminder.debts
 
-  // Check max attempts
-  if (attempts >= MAX_ATTEMPTS) {
+  const maxAttempts = reminder.max_attempts || 3
+  if (attempts >= maxAttempts) {
     await supabase
       .from("reminders")
       .update({ status: "failed" })
@@ -104,16 +128,13 @@ async function processReminder(supabase: any, reminder: any): Promise<string> {
     return "failed"
   }
 
-  // Get client timezone (default to Mexico City)
   const timezone = DEFAULT_TIMEZONE
   const localHour = getLocalHour(new Date(), timezone)
 
-  // Check if within allowed hours (8:00 - 20:00)
   if (localHour < REMINDER_START_HOUR || localHour >= REMINDER_END_HOUR) {
-    // Reprocess for next valid time
     const nextValidTime = getNextValidTime(timezone)
 
-    const { error } = await supabase
+    await supabase
       .from("reminders")
       .update({
         status: "pending",
@@ -122,21 +143,20 @@ async function processReminder(supabase: any, reminder: any): Promise<string> {
       })
       .eq("id", id)
 
-    if (error) console.error("Error rescheduling reminder:", error)
     return "rescheduled"
   }
 
-  // Send reminder message
-  const sent = await sendReminderMessage(
-    supabase,
-    client.phone,
+  const message = buildReminderMessage(
+    reminder_type,
     client.name,
     debt.description,
-    debt.amount
+    debt.amount,
+    messages
   )
 
+  const sent = await sendReminderMessage(supabase, client.phone, message)
+
   if (sent) {
-    // Update to sent
     await supabase
       .from("reminders")
       .update({
@@ -147,9 +167,8 @@ async function processReminder(supabase: any, reminder: any): Promise<string> {
       .eq("id", id)
     return "sent"
   } else {
-    // Increment attempts, mark as failed if max reached
     const newAttempts = attempts + 1
-    const newStatus = newAttempts >= MAX_ATTEMPTS ? "failed" : "pending"
+    const newStatus = newAttempts >= maxAttempts ? "failed" : "pending"
 
     await supabase
       .from("reminders")
@@ -160,6 +179,14 @@ async function processReminder(supabase: any, reminder: any): Promise<string> {
       .eq("id", id)
 
     return newStatus
+  }
+}
+
+async function generateOverdueReminders(supabase: any): Promise<void> {
+  try {
+    await supabase.rpc("generate_overdue_reminders")
+  } catch (err) {
+    console.error("Error generating overdue reminders:", err)
   }
 }
 
@@ -174,11 +201,13 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     )
 
-    // Get pending reminders that are due
+    const reminderMessages = await getReminderMessages(supabase)
+
     const { data: reminders, error: remindersError } = await supabase
       .from("reminders")
       .select(`
         id,
+        reminder_type,
         client_id,
         debt_id,
         status,
@@ -196,6 +225,8 @@ Deno.serve(async (req: Request) => {
     if (remindersError) throw remindersError
 
     if (!reminders || reminders.length === 0) {
+      await generateOverdueReminders(supabase)
+
       return new Response(
         JSON.stringify({ processed: 0, message: "No pending reminders" }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -208,11 +239,12 @@ Deno.serve(async (req: Request) => {
       failed: 0,
     }
 
-    // Process each reminder
     for (const reminder of reminders) {
-      const result = await processReminder(supabase, reminder)
+      const result = await processReminder(supabase, reminder, reminderMessages)
       results[result as keyof typeof results]++
     }
+
+    await generateOverdueReminders(supabase)
 
     console.log(`Reminders processed: ${JSON.stringify(results)}`)
 

@@ -4,11 +4,10 @@ export interface Client {
   phone: string
   email?: string
   debt_total: number
-  status: 'active' | 'inactive' | 'blocked'
-  timezone?: string
+  status: 'active' | 'inactive' | 'contacted'
+  last_contact_at?: string
   created_at: string
   updated_at: string
-  last_contact?: string
 }
 
 export interface Debt {
@@ -61,7 +60,7 @@ export interface ClientDetail extends Client {
   receipts: Receipt[]
 }
 
-export type ClientStatus = 'all' | 'active' | 'inactive' | 'blocked'
+export type ClientStatus = 'all' | 'active' | 'inactive' | 'contacted'
 
 export interface ClientFilters {
   search: string

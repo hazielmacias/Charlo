@@ -90,7 +90,6 @@ export function useClients() {
         phone: data.phone,
         email: data.email,
         status: data.status || 'active',
-        timezone: data.timezone || 'America/Mexico_City',
       })
 
     if (insertError) throw insertError

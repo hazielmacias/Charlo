@@ -37,9 +37,9 @@ export function Debts() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold text-gray-900">Cobros</h1>
-          <p className="text-sm text-gray-400 mt-0.5">
-            {total} cobros registrados
-          </p>
+<p className="text-sm text-gray-500 mt-0.5">
+             {total} cobros registrados
+           </p>
         </div>
         <div className="flex gap-2">
           <button
@@ -113,9 +113,9 @@ export function Debts() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-400">
-            Pagina {filters.page} de {totalPages}
-          </p>
+<p className="text-sm text-gray-500">
+             Pagina {filters.page} de {totalPages}
+           </p>
           <div className="flex gap-2">
             <button
               onClick={() => setPage(filters.page - 1)}

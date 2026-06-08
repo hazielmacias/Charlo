@@ -33,27 +33,30 @@ export function MessageInput({ onSend, disabled, sending }: MessageInputProps) {
   }
 
   return (
-    <div className="border-t border-gray-200 bg-white p-3">
+    <div className="bg-[#f0f2f5] px-4 py-2">
       <div className="flex items-end gap-2">
-        <textarea
-          ref={textareaRef}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Escribir mensaje..."
-          disabled={disabled}
-          rows={1}
-          className="flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all disabled:opacity-50"
-        />
+        <div className="flex-1 flex items-end bg-white rounded-lg px-3 py-1.5 shadow-sm">
+          <textarea
+            ref={textareaRef}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Escribe un mensaje..."
+            disabled={disabled}
+            rows={1}
+            className="flex-1 resize-none bg-transparent text-sm focus:outline-none disabled:opacity-50 py-1"
+            style={{ minHeight: '24px', maxHeight: '120px' }}
+          />
+        </div>
         <button
           onClick={handleSend}
           disabled={!text.trim() || disabled || sending}
-          className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#25d366] text-white hover:bg-[#1da851] active:bg-[#1b8f4a] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
         >
           {sending ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <Send className="w-4 h-4" />
+            <Send className="w-5 h-5" />
           )}
         </button>
       </div>

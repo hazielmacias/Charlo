@@ -55,7 +55,7 @@ export function AgingChart({ data }: AgingChartProps) {
         <h3 className="text-sm font-semibold text-gray-900">
           Antigüedad de Deudas
         </h3>
-        <p className="text-xs text-gray-400 mt-0.5">Distribución de deudas vencidas por días</p>
+        <p className="text-xs text-gray-500 mt-0.5">Distribución de deudas vencidas por días</p>
       </div>
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">

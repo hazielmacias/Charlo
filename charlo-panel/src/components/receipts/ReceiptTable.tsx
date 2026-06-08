@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Eye, CheckCircle, XCircle, MessageSquare, MoreVertical } from 'lucide-react'
+import { Eye, CheckCircle, XCircle, MessageSquare, MoreVertical, FileText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Receipt } from '../../types/receipt'
 
@@ -45,8 +45,12 @@ export function ReceiptTable({ receipts, onApprove, onReject, onClarification }:
 
   if (receipts.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+      <div className="bg-white rounded-xl border border-gray-100 p-12 text-center">
+        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <FileText className="w-6 h-6 text-gray-400" />
+        </div>
         <p className="text-gray-500 text-sm">No se encontraron comprobantes</p>
+        <p className="text-gray-400 text-xs mt-1">Los comprobantes aparecerán cuando los clientes envíen pagos</p>
       </div>
     )
   }

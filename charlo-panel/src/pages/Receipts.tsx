@@ -57,8 +57,8 @@ export function Receipts() {
       {/* Header */}
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Comprobantes</h1>
-        <p className="text-sm text-gray-400 mt-0.5">
-          {receipts?.total || 0} comprobantes recibidos
+<p className="text-sm text-gray-500 mt-0.5">
+           {receipts?.total || 0} comprobantes recibidos
           {pendingCount > 0 && (
             <span className="ml-2 text-amber-500 font-medium">{pendingCount} pendientes</span>
           )}
@@ -120,9 +120,9 @@ export function Receipts() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-400">
-            Pagina {filters.page} de {totalPages}
-          </p>
+<p className="text-sm text-gray-500">
+             Pagina {filters.page} de {totalPages}
+           </p>
           <div className="flex gap-2">
             <button
               onClick={() => setPage(filters.page - 1)}

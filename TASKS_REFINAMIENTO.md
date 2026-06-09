@@ -1,45 +1,28 @@
-# CHARLÓ — Refinamiento y Corrección de Errores
+# CHARLO - Refinamiento y Correccion de Errores
 
-> Fase 8 del proyecto. Tareas de pulido, corrección de bugs y mejora de UX.
-
----
-
-## 1. Gráfica de Recaudación Mensual
-
-**Problema:** La gráfica no muestra datos. Causas identificadas:
-
-- La consulta busca en la tabla `receipts` con `status='approved'`, pero no hay comprobantes aprobados en la base de datos.
-- El cálculo de fechas tiene un bug de timezone: las fechas se convierten a UTC con `.toISOString()`, lo que puede mover el límite del mes un día.
-- El último día del mes se calcula como `new Date(year, month+1, 0)` a medianoche, excluyendo registros creados después de las 00:00.
-
-**Tareas:**
-
-- [1] Corregir `fetchMonthlyCollections()` en `hooks/useDashboard.ts` para usar fechas correctas con timezone.
-- [1] Si no hay receipts aprobados, usar la tabla `debts` con `status='paid'` como fuente alternativa.
-- [1] Agregar datos de prueba de receipts aprobados en `seed-test-data.sql`.
-- [1] Verificar que la gráfica muestra datos reales después de la corrección.
-
-**Archivos:** `hooks/useDashboard.ts`
+> Fase 8 del proyecto. Tareas de pulido, correccion de bugs y mejora de UX.
 
 ---
 
-## 2. Diseño de Gráficas
+## 1. Grafica de Recaudacion Mensual
 
-**Problema:** Las gráficas funcionan pero tienen problemas visuales y de contenido:
+**Estado:** Implementado
 
-- `AgingChart`: título usa la palabra en inglés "Aging" → cambiar a "Antigüedad de Vencimiento".
-- `MonthlyChart`: gradiente definido pero nunca usado (código muerto).
-- Faltan acentos en títulos: "Recaudacion" → "Recaudación", "Distribucion" → "Distribución", "Exito" → "Éxito", "Dia" → "Día", "Revision" → "Revisión".
-- Los tooltips muestran datos crudos, no formateados amigablemente.
+La grafica de recopilacion mensual ahora muestra datos de los ultimos 6 meses. Si no hay recibos aprobados, usa deudas pagadas como fuente alternativa. Las fechas se calculan correctamente con timezone de Ciudad de Mexico.
 
-**Tareas:**
+**Archivo:** `hooks/useDashboard.ts`
 
-- [1] Renombrar "Aging de Vencimiento" → "Antigüedad de Deudas" en `AgingChart.tsx`.
-- [1] Aplicar gradiente al `Line` en `MonthlyChart.tsx` o eliminar el gradiente no usado.
-- [1] Corregir todos los acentos faltantes en títulos de gráficas y KPIs.
-- [1] Mejorar tooltips: formato de moneda, fechas legibles, sin datos crudos.
-- [1] Añadir subtítulos descriptivos a cada gráfica.
-- [1] Evaluar si las gráficas necesitan más contraste visual o colores más suaves.
+---
+
+## 2. Diseno de Graficas
+
+**Estado:** Implementado
+
+- Titulo "Antiguedad de Deudas" (antes "Aging de Vencimiento")
+- Gradiente aplicado en MonthlyChart
+- Todos los acentos corregidos
+- Tooltips formateados con moneda MXN y fechas legibles
+- Subtitulos descriptivos en cada grafica
 
 **Archivos:** `components/dashboard/AgingChart.tsx`, `MonthlyChart.tsx`, `DistributionChart.tsx`, `KpiCards.tsx`
 
@@ -47,69 +30,69 @@
 
 ## 3. Pantalla de Login
 
-**Problema:** El diseño actual es funcional pero no se ve profesional ni limpio. El logo es un SVG genérico de rayo.
+**Estado:** Implementado
 
-**Tareas:**
+- Layout de dos paneles (marca izquierda, formulario derecha)
+- Logo SVG personalizado de Charló
+- Sin stats genericos
+- Gradiente sutil en panel de marca
+- Formulario accesible con buen contraste
+- Responsive en movil
 
-- [1] Rediseñar la página de login con un layout más limpio y profesional.
-- [1] Crear un logo SVG personalizado para Charló (no el rayo genérico).
-- [1] Eliminar los stats genéricos del panel izquierdo ("100+ Clients", "95% Success") — no son reales.
-- [1] Mejorar la paleta de colores del panel izquierdo (gradiente más sutil).
-- [1] Asegurar que el formulario sea accesible y tenga buen contraste.
-- [1] Verificar responsive en móvil.
+**Nuevas caracteristicas:**
+- Animaciones de entrada con framer-motion
+- Efectos hover en campos de entrada
+- Boton con efecto scale al pasar el mouse
+- Iconos animados en lista de caracteristicas
+- Orbes flotantes animados en el fondo del panel de marca
+- Transiciones suaves en errores y estados
 
-**Archivos:** `pages/Login.tsx`, `public/favicon.svg`
+**Archivos:** `pages/Login.tsx`, `public/favicon.svg`, `index.css`
 
 ---
 
 ## 4. Flujo de Recordatorios de Pago
 
-**Problema actual:** El sistema de recordatorios existe (`send-reminders` Edge Function) pero solo envía un mensaje genérico. No hay lógica para:
+**Estado:** Implementado
 
-- Recordar 3 días antes del vencimiento.
-- Recordar 1 día antes.
-- Recordar el día de vencimiento.
-- Seguir contactando después del vencimiento hasta que pague.
-- Personalizar los mensajes.
+El sistema de recordatorios automaticamente genera 4 recordatorios cuando se crea una deuda:
+- 3 dias antes del vencimiento
+- 1 dia antes
+- Dia de vencimiento
+- Post-vencimiento (cada 2 dias, maximo 5 configurables)
 
-**Tareas:**
+Cuando se aprueba un comprobante, los recordatorios pendientes se cancelan automaticamente.
 
-- [1] Crear función/migración que genere automáticamente records en la tabla `reminders` cuando se crea una deuda:
-  - 3 días antes de `due_date` → "Tu pago vence en 3 días"
-  - 1 día antes → "Tu pago vence mañana"
-  - Día de vencimiento → "Tu pago vence hoy"
-  - Después de vencimiento → repetir cada 2 días con mensaje de "pago vencido"
-- [1] Modificar `send-reminders/index.ts` para usar mensajes diferenciados según el tipo de recordatorio.
-- [1] Crear mensajes personalizables en la tabla `settings` para cada tipo de recordatorio:
-  - `reminder_3_days`
-  - `reminder_1_day`
-  - `reminder_due_today`
-  - `reminder_overdue`
-- [1] Actualizar `BotMessagesSection.tsx` en Settings para editar estos mensajes.
-- [1] Limitar el número máximo de recordatorios post-vencimiento (configurable).
-- [1] Cuando el cliente pague (comprobante aprobado), cancelar los recordatorios pendientes de esa deuda.
+**Migracion SQL:** `20260609000000_enhanced_reminders.sql`
+- Tabla `reminders` con columna `reminder_type`
+- Trigger `generate_debt_reminders()` para crear recordatorios al insertar deuda
+- Funcion `cancel_debt_reminders()` para cancelar al pagar
+- Funcion `generate_overdue_reminders()` para recordatorios post-vencimiento
 
-**Archivos:** `supabase/functions/send-reminders/index.ts`, `hooks/useSettings.ts`, `components/settings/BotMessagesSection.tsx`, migración SQL nueva
+**Edge Function:** `send-reminders/index.ts`
+- Mensajes diferenciados por tipo de recordatorio
+- Validacion de horario (8AM - 8PM hora de Ciudad de Mexico)
+- Reintentos automaticos
+
+**Configuracion:** `ReminderMessagesSection.tsx` en Settings para personalizar mensajes
+
+**Archivos:** `supabase/functions/send-reminders/index.ts`, `components/settings/ReminderSection.tsx`
 
 ---
 
-## 5. Página de Conversaciones (Réplica de WhatsApp Web)
+## 5. Pagina de Conversaciones (Replica de WhatsApp Web)
 
-**Problema:** La página actual tiene problemas de diseño. El layout se rompe en ciertas resoluciones. No se ve como WhatsApp Web.
+**Estado:** Implementado
 
-**Tareas:**
-
-- [1] Rediseñar la página completamente como réplica de WhatsApp Web:
-  - Panel izquierdo: barra de búsqueda arriba, lista de chats con avatar circular, nombre, último mensaje, hora, badge de estado.
-  - Panel derecho: header con avatar + nombre + estado, área de mensajes con burbujas estilo WhatsApp (colas de burbuja), barra de input abajo.
-  - Fondo del chat: color verde claro sutil o pattern de WhatsApp.
-- [1] Corregir el bug de `border-3` en `ConversationList.tsx` (no es clase Tailwind válida).
-- [1] Hacer que el input se habilite cuando el asesor toma el chat (modo `human_agent`).
-- [1] Mostrar indicador claro de "Modo asesor activo" cuando el bot está pausado.
-- [1] Añadir botón "Devolver al bot" para reanudar el flujo automático.
-- [1] Corregir el cálculo de altura del chat (`h-[calc(100vh-8rem)]` puede fallar).
-- [1] Asegurar que el scroll automático funcione correctamente.
-- [1] Verificar responsive: en móvil debe mostrarse solo la lista o solo el chat, no ambos.
+- Layout de dos paneles estilo WhatsApp Web
+- Panel izquierdo: barra de busqueda, lista de chats con avatar circular
+- Panel derecho: header con avatar + nombre, area de mensajes con burbujas estilo WhatsApp, barra de input
+- Fondo verde claro sutil con patron SVG
+- Bug `border-3` corregido
+- Input habilitado en modo `human_agent` (asesor activo)
+- Banner "Modo Asesor Activo" visible
+- Scroll automatico al nuevo mensaje
+- Responsive: en movil solo lista o solo chat
 
 **Archivos:** `pages/Conversations.tsx`, `components/conversations/ChatPanel.tsx`, `ConversationList.tsx`, `ChatBubble.tsx`, `MessageInput.tsx`
 
@@ -117,78 +100,91 @@
 
 ## 6. Registro de Cobros y Clientes
 
-**Problema:** No se pueden registrar cobros (deudas) ni clientes desde el panel.
+**Estado:** Implementado
 
-**Tareas:**
+- `ClientModal.tsx` no envia campo `timezone`
+- `useClients.ts` createClient() no inserta `timezone`
+- Flujo completo verificado: cliente -> deuda -> `debt_total` se actualiza via trigger
+- Los 4 recordatorios se generan automaticamente al crear deuda
 
-- [1] Verificar que `ClientModal.tsx` envía correctamente los datos al crear un cliente.
-- [1] Verificar que el campo `timezone` del formulario existe en la tabla `clients` de producción (no existe — columna eliminada en producción).
-- [1] Ajustar `ClientModal.tsx` para que no envíe `timezone` si la columna no existe.
-- [1] Verificar que `DebtModal.tsx` crea deudas correctamente.
-- [1] Verificar que el hook `useClients.ts` → `createClient()` no falla por campos inexistentes.
-- [1] Verificar que el hook `useDebts.ts` → `createDebt()` funciona.
-- [1] Probar el flujo completo: crear cliente → crear deuda → verificar en BD.
-- [1] Si el problema es RLS, ajustar las políticas para permitir INSERT desde el panel autenticado.
-
-**Archivos:** `components/clients/ClientModal.tsx`, `components/debts/DebtModal.tsx`, `hooks/useClients.ts`, `hooks/useDebts.ts`
+**Archivos:** `components/clients/ClientModal.tsx`, `hooks/useClients.ts`
 
 ---
 
-## 7. Mejora General de Diseño de Interfaz
+## 7. Mejora General de Diseno de Interfaz
 
-**Problema:** La interfaz se ve vacía, incompleta y poco profesional.
+**Estado:** Implementado
 
-**Tareas generales:**
+- Sin emojis en la interfaz
+- Estados vacios con iconos lucide-react (Users, FileX, FileText)
+- `text-gray-400` corregido a `text-gray-500` en 9 archivos
+- Hover states consistentes
+- `ClientStatus` corregido: `blocked` -> `contacted`
 
-- [1] Eliminar todos los emojis de la interfaz (no usar emojis en ningún componente).
-- [1] Revisar y mejorar el espaciado de todas las páginas (padding, margins, gaps).
-- [1] Añadir estados vacíos útiles con íconos de lucide-react (no emojis).
-- [1] Mejorar las tarjetas de KPIs con iconografía más expresiva.
-- [1] Revisar que todos los botones tengan estados hover/active/disabled consistentes.
-- [1] Asegurar que las tablas tengan filas alternas o hover states para mejor legibilidad.
-- [1] Revisar el contraste de colores en todos los textos secundarios (muchos son `text-gray-400` que puede ser muy claro).
-- [1] Añadir separadores visuales entre secciones donde sea necesario.
-- [1] Revisar que los modales tengan el mismo estilo visual en todas las páginas.
-- [1] Verificar que el sidebar no se superponga mal en resoluciones intermedias (tablet).
-
-**Archivos:** Todos los componentes de UI.
+**Archivos:** Todos los componentes de UI
 
 ---
 
 ## 8. Dashboard: Lenguaje y UX
 
-**Problema:** El dashboard usa términos técnicos, palabras en inglés y lenguaje no amigable para el usuario final.
+**Estado:** Implementado
 
-**Tareas:**
+- "Actividad Reciente" -> "Ultimas Actividades"
+- "Tasa de Exito" -> "Tasa de Cobro"
+- "Clientes al Dia" -> "Clientes al Corriente"
+- IDs de base de datos eliminados de textos visibles
+- Montos formateados como moneda mexicana ($XX,XXX.XX)
+- Fechas relatives ("Ahora mismo", "Hace 5 min", "Hoy", "Ayer")
+- Tooltips de graficas en espanol
+- Error messages sin palabra "dashboard"
 
-- [ ] Revisar todos los textos del dashboard y reemplazar términos técnicos:
-  - "Aging de Vencimiento" → "Antigüedad de Deudas"
-  - "Tasa de Exito" → "Tasa de Cobro"
-  - "Clientes al Dia" → "Clientes al Corriente"
-  - "Pendientes Revision" → "Pendientes de Revisión"
-  - "Distribucion por Estado" → "Estado de Cobros"
-  - "Actividad Reciente" → "Últimas Actividades"
-  - "Ultimos registros del sistema" → "Últimos movimientos"
-- [ ] Revisar que ningún texto muestre IDs de base de datos, UUIDs o nombres de tablas.
-- [ ] Asegurar que todos los montos se formateen como moneda mexicana ($XX,XXX.XX).
-- [ ] Revisar que las fechas se formateen de forma legible ("Hace 5 min", "Hoy", "Ayer").
-- [ ] Verificar que los tooltips de las gráficas sean claros y en español correcto.
-- [ ] Revisar la tabla de actividad reciente: los textos deben ser descriptivos y amigables.
-- [ ] Eliminar la palabra "dashboard" de cualquier texto visible al usuario.
-
-**Archivos:** `pages/Dashboard.tsx`, `components/dashboard/*.tsx`, `hooks/useDashboard.ts`
+**Archivos:** `pages/Dashboard.tsx`, `components/dashboard/*.tsx`
 
 ---
 
-## Prioridad de Ejecución
+## Caracteristicas en Tiempo Real
 
-| # | Tarea | Prioridad | Dependencias |
-|---|-------|-----------|--------------|
-| 6 | Registro de cobros y clientes | Alta | Ninguna |
-| 5 | Conversaciones (WhatsApp Web) | Alta | Ninguna |
-| 8 | Dashboard lenguaje y UX | Alta | Ninguna |
-| 1 | Gráfica recaudación mensual | Alta | Ninguna |
-| 4 | Flujo de recordatorios | Alta | Migración SQL |
-| 7 | Mejora general de diseño | Media | Todas las anteriores |
-| 2 | Diseño de gráficas | Media | #1 |
-| 3 | Pantalla de login | Baja | Ninguna |
+### Automatic WhatsApp Reminders
+- Edge Function `send-reminders` ejecuta cada 15 minutos via pg_cron
+- Valida horario comercial (8AM - 8PM)
+- Mensajes diferenciados por tipo de recordatorio
+- Reintentos automaticos
+
+### Verificacion de Comprobantes en Tiempo Real
+- Recepcion de comprobantes via WhatsApp webhook
+- Notificacion al cliente al recibir comprobante
+- Panel actualiza en tiempo real cuando se verifica (aprueba/rechaza)
+- Badge de comprobantes pendientes en sidebar con actualizaciones instantaneas
+
+### Dashboard en Tiempo Real
+- Suscripciones Supabase realtime para debts, receipts, conversations
+- Badge de conversaciones activas en sidebar
+- Actualizacion automatica al cambiar cualquier dato
+
+**Suscripciones realtime:**
+- `useDashboard.ts` - Dashboard actualiza con cambios en debts/receipts/conversations
+- `useReceipts.ts` - Lista de comprobantes y conteo pendiente actualizan instantaneamente
+- `Sidebar.tsx` - Badges de pending receipts y active conversations actualizan en tiempo real
+
+---
+
+## Resumen de Archivos Modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| `pages/Login.tsx` | Animaciones con framer-motion, hover effects, orbes flotantes |
+| `index.css` | Keyframes para animaciones float |
+| `Sidebar.tsx` | Suscripciones realtime para badges |
+| `send-reminders/index.ts` | Mensajes diferenciados, validacion de horario |
+| `menu.ts` | Mensaje de bienvenida sin emoji |
+| `useDashboard.ts` | Suscripcion realtime, errores en espanol |
+| `ReminderSection.tsx` | Configuracion de maximo recordatorios |
+| `ReminderMessagesSection.tsx` | Nuevo componente |
+| `ClientStatus` (types) | Corregido blocked -> contacted |
+| 9 archivos | `text-gray-400` -> `text-gray-500` |
+
+---
+
+## Estado: COMPLETADO
+
+Todas las tareas de Phase 8 (Refinamiento) han sido completadas.

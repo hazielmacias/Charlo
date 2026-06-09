@@ -56,7 +56,7 @@ export async function sendWelcomeMenu(
   const firstName = clientName.split(" ")[0] || "Cliente"
 
   // Welcome message
-  const welcomeText = `¡Hola ${firstName}! 👋 Bienvenido a Charló.\n\n¿En qué puedo ayudarte hoy?`
+  const welcomeText = `¡Hola ${firstName}! Bienvenido a Charló.\n\n¿En qué puedo ayudarte hoy?`
 
   // Send via whatsapp-send function
   const supabaseUrl = Deno.env.get("SUPABASE_URL")

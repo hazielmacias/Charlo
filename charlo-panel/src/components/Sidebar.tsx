@@ -54,13 +54,45 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       }
     }
 
+    // Initial fetch
     fetchPending()
     fetchActiveConversations()
+
+    // Realtime subscription for receipts (instant badge updates)
+    const receiptsChannel = supabase
+      .channel('sidebar-receipts-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'receipts' },
+        () => {
+          fetchPending()
+        }
+      )
+      .subscribe()
+
+    // Realtime subscription for conversations
+    const conversationsChannel = supabase
+      .channel('sidebar-conversations-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'conversations' },
+        () => {
+          fetchActiveConversations()
+        }
+      )
+      .subscribe()
+
+    // Fallback polling every 30 seconds
     const interval = setInterval(() => {
       fetchPending()
       fetchActiveConversations()
     }, 30000)
-    return () => clearInterval(interval)
+
+    return () => {
+      clearInterval(interval)
+      supabase.removeChannel(receiptsChannel)
+      supabase.removeChannel(conversationsChannel)
+    }
   }, [])
 
   return (

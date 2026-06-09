@@ -13,12 +13,6 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>
 
-const features = [
-  { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', label: 'Recordatorios automáticos por WhatsApp' },
-  { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', label: 'Verificación de comprobantes en tiempo real' },
-  { icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z', label: 'Dashboard en tiempo real' },
-]
-
 export function Login() {
   const navigate = useNavigate()
   const { signIn } = useAuth()
@@ -115,56 +109,67 @@ export function Login() {
         </svg>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col justify-between w-full p-12 xl:p-16">
-          {/* Top: Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/20">
-              <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
-                <rect width="48" height="48" rx="12" fill="#1e293b" />
-                <path d="M12 16C12 13.79 13.79 12 16 12H32C34.21 12 36 13.79 36 16V28C36 30.21 34.21 32 32 32H20L14 38V32H12V16Z" fill="white" fillOpacity="0.95" />
-                <path d="M17 20L21 24L27 18" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <div className="relative z-10 flex flex-col justify-center w-full p-12 xl:p-16">
+          {/* Logo: large wordmark with custom icon */}
+          <div className="mb-16 flex items-center gap-4">
+            {/* Custom logo icon: speech bubble with checkmark */}
+            <div className="relative w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/30">
+              <svg width="30" height="30" viewBox="0 0 48 48" fill="none">
+                <defs>
+                  <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#0f172a" />
+                    <stop offset="1" stopColor="#1e3a8a" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M12 16C12 13.79 13.79 12 16 12H32C34.21 12 36 13.79 36 16V28C36 30.21 34.21 32 32 32H20L14 38V32H12V16Z"
+                  fill="url(#logoGrad)"
+                />
+                <path
+                  d="M18 22L22 26L30 18"
+                  stroke="white"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
+              {/* Subtle dot accent */}
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-slate-950" />
             </div>
-            <div>
-              <div className="text-white text-lg font-semibold tracking-tight" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}>
-                Charlo
+
+            {/* Wordmark */}
+            <div className="flex flex-col">
+              <div
+                className="text-white text-2xl font-semibold tracking-tight leading-none"
+                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.035em' }}
+              >
+                Charl<span className="text-blue-400">ó</span>
               </div>
-              <div className="text-blue-200/60 text-[10px] uppercase tracking-[0.2em] font-medium">
+              <div
+                className="text-blue-200/50 text-[10px] uppercase font-semibold mt-1.5"
+                style={{ letterSpacing: '0.25em' }}
+              >
                 Cobranza
               </div>
             </div>
           </div>
 
-          {/* Middle: Tagline */}
+          {/* Tagline with subtle WhatsApp mention */}
           <div className="max-w-md">
             <h1
-              className="text-white text-4xl xl:text-5xl font-light leading-[1.1] tracking-tight mb-6"
+              className="text-white text-4xl xl:text-5xl font-light leading-[1.1] mb-7"
               style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
             >
-              Cobranza <span className="font-semibold italic">inteligente</span> que cobra por ti.
+              Cobra <span className="font-semibold italic">inteligente</span>,
+              <br />
+              directo por <span className="font-medium text-blue-300">WhatsApp</span>.
             </h1>
             <p
-              className="text-slate-300/80 text-base leading-relaxed max-w-sm"
+              className="text-slate-400/90 text-[15px] leading-relaxed max-w-sm"
               style={{ letterSpacing: '-0.005em' }}
             >
-              Automatiza recordatorios, recibe pagos y gestiona a tus clientes desde un solo lugar.
+              Tu asistente de cobranza que recuerda, conversa y recupera pagos automaticamente.
             </p>
-          </div>
-
-          {/* Bottom: Features */}
-          <div className="space-y-3.5 max-w-sm">
-            {features.map((feature, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg bg-white/8 backdrop-blur-sm flex items-center justify-center flex-shrink-0 border border-white/10">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.9">
-                    <path d={feature.icon} />
-                  </svg>
-                </div>
-                <span className="text-slate-200/90 text-sm font-normal" style={{ letterSpacing: '-0.005em' }}>
-                  {feature.label}
-                </span>
-              </div>
-            ))}
           </div>
         </div>
       </aside>
@@ -173,21 +178,25 @@ export function Login() {
       <main className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-16 bg-white">
         <div className="w-full max-w-[400px]">
           {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-12">
-            <div className="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
-                <rect width="48" height="48" rx="12" fill="white" />
-                <path d="M12 16C12 13.79 13.79 12 16 12H32C34.21 12 36 13.79 36 16V28C36 30.21 34.21 32 32 32H20L14 38V32H12V16Z" fill="#0f172a" />
-                <path d="M17 20L21 24L27 18" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <div className="lg:hidden flex items-center gap-3 mb-14">
+            <div className="relative w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 48 48" fill="none">
+                <path d="M12 16C12 13.79 13.79 12 16 12H32C34.21 12 36 13.79 36 16V28C36 30.21 34.21 32 32 32H20L14 38V32H12V16Z" fill="white" />
+                <path d="M17 20L21 24L27 18" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-blue-500 rounded-full border-2 border-white" />
             </div>
-            <span className="text-base font-semibold text-slate-900 tracking-tight">Charlo</span>
+            <div className="flex flex-col">
+              <span className="text-base font-semibold text-slate-900 tracking-tight" style={{ letterSpacing: '-0.025em' }}>
+                Charl<span className="text-blue-500">ó</span>
+              </span>
+            </div>
           </div>
 
           {/* Header */}
           <div className="mb-10">
             <h2
-              className="text-slate-900 text-[28px] font-semibold leading-tight tracking-tight mb-2"
+              className="text-slate-900 text-[28px] font-semibold leading-tight mb-2"
               style={{ letterSpacing: '-0.025em' }}
             >
               Iniciar sesión
@@ -274,7 +283,7 @@ export function Login() {
           {/* Footer */}
           <div className="mt-12 pt-6 border-t border-slate-100">
             <p className="text-center text-xs text-slate-400 tracking-wide">
-              Charlo · v1.0
+              Charló · v1.0
             </p>
           </div>
         </div>
